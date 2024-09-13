@@ -53,6 +53,15 @@ jobs:
             ls -al
             cd ..
             echo "Great-grandparent directory:"
+            pwd
+            ls -al
+            cd ..
+            echo "Great-great-grandparent directory:"
+            pwd
+            ls -al
+            cd ..
+            echo "Great-great-great-grandparent directory:"
+            pwd
             ls -al
 
       - name: Upload artifact 📡

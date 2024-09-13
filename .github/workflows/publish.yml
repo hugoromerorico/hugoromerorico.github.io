@@ -48,6 +48,12 @@ jobs:
             cd ..
             echo "Parent directory:"
             ls -al
+            cd ..
+            echo "Grandparent directory:"
+            ls -al
+            cd ..
+            echo "Great-grandparent directory:"
+            ls -al
 
       - name: Upload artifact 📡
         uses: actions/upload-pages-artifact@v3

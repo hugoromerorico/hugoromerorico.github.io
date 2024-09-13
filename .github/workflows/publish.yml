@@ -36,33 +36,15 @@ jobs:
       - name: Build with Next.js 🏗️
         run: npm run build
     
-      - name: List `.next` directory
-        run: ls -al .next
-
+      - name: Remove next.config.js
+        run: rm -f next.config.js
       
       - name: List directory after build
         run: |
             pwd
             echo "Current directory:"
             ls -al
-            cd ..
-            echo "Parent directory:"
-            ls -al
-            cd ..
-            echo "Grandparent directory:"
-            ls -al
-            cd ..
-            echo "Great-grandparent directory:"
-            pwd
-            ls -al
-            cd ..
-            echo "Great-great-grandparent directory:"
-            pwd
-            ls -al
-            cd ..
-            echo "Great-great-great-grandparent directory:"
-            pwd
-            ls -al
+            cat next.config.mjs
 
       - name: Upload artifact 📡
         uses: actions/upload-pages-artifact@v3

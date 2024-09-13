@@ -34,7 +34,13 @@ jobs:
         run: npm run build
       
       - name: List directory after build
-        run: ls -al
+      run: |
+          pwd
+          echo "Current directory:"
+          ls -al
+          cd ..
+          echo "Parent directory:"
+          ls -al
 
       - name: Upload artifact 📡
         uses: actions/upload-pages-artifact@v3

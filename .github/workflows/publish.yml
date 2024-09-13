@@ -29,9 +29,16 @@ jobs:
         uses: actions/configure-pages@v4
         with:
           static_site_generator: next
-
+    
+      - name: Print Next.js config
+        run: node -e "console.log(require('./next.config.mjs'))"
+        
       - name: Build with Next.js 🏗️
         run: npm run build
+    
+      - name: List `.next` directory
+        run: ls -al .next
+
       
       - name: List directory after build
         run: |

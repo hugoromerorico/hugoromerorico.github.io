@@ -30,14 +30,11 @@ jobs:
         with:
           static_site_generator: next
     
-    #   - name: Print Next.js config
-    #     run: node -e "console.log(require('./next.config.mjs'))"
+      - name: Remove next.config.js
+        run: rm -f next.config.js
         
       - name: Build with Next.js 🏗️
         run: npm run build
-    
-      - name: Remove next.config.js
-        run: rm -f next.config.js
       
       - name: List directory after build
         run: |

@@ -30,8 +30,8 @@ jobs:
         with:
           static_site_generator: next
     
-      - name: Print Next.js config
-        run: node -e "console.log(require('./next.config.mjs'))"
+    #   - name: Print Next.js config
+    #     run: node -e "console.log(require('./next.config.mjs'))"
         
       - name: Build with Next.js 🏗️
         run: npm run build

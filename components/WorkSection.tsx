@@ -1,12 +1,29 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ChevronDown, ChevronUp, Briefcase, ArrowRight } from 'lucide-react'
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronUp, Briefcase, ArrowRight } from 'lucide-react';
 
-const workExperience = [
+// Define interfaces for typing the work experience data
+interface TransitionInfo {
+  from: { name: string; logo: string };
+  to: { name: string; logo: string };
+  date: string;
+}
+
+interface Experience {
+  title: string;
+  company: string;
+  duration: string;
+  logo: string;
+  transitionInfo?: TransitionInfo;
+  responsibilities: string[];
+  skills: string[];
+}
+
+const workExperience: Experience[] = [
   {
     title: "AI Engineer",
     company: "+Orange (formerly Grupo MásMóvil)",
@@ -75,10 +92,14 @@ const workExperience = [
     ],
     skills: ["Digital Product Development", "Mobile App Development", "Team Collaboration"]
   }
-]
+];
 
-const CompanyTransition = ({ transitionInfo }) => (
-  <motion.div 
+interface CompanyTransitionProps {
+  transitionInfo: TransitionInfo;
+}
+
+const CompanyTransition: React.FC<CompanyTransitionProps> = ({ transitionInfo }) => (
+  <motion.div
     className="flex items-center justify-center my-4 p-4 bg-gradient-to-r from-blue-100 to-orange-100 rounded-lg"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -95,10 +116,15 @@ const CompanyTransition = ({ transitionInfo }) => (
     </div>
     <span className="ml-4 text-sm text-gray-600">({transitionInfo.date})</span>
   </motion.div>
-)
+);
 
-const WorkExperienceCard = ({ experience, index }) => {
-  const [isExpanded, setIsExpanded] = useState(false)
+interface WorkExperienceCardProps {
+  experience: Experience;
+  index: number;
+}
+
+const WorkExperienceCard: React.FC<WorkExperienceCardProps> = ({ experience, index }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <motion.div
@@ -134,16 +160,16 @@ const WorkExperienceCard = ({ experience, index }) => {
                 <div className="mb-4">
                   <strong>Responsibilities:</strong>
                   <ul className="list-disc list-inside mt-2">
-                    {experience.responsibilities.map((resp, index) => (
-                      <li key={index}>{resp}</li>
+                    {experience.responsibilities.map((resp, idx) => (
+                      <li key={idx}>{resp}</li>
                     ))}
                   </ul>
                 </div>
                 <div>
                   <strong>Skills:</strong>
                   <div className="flex flex-wrap gap-1 mt-2">
-                    {experience.skills.map((skill, index) => (
-                      <Badge key={index} variant="secondary">{skill}</Badge>
+                    {experience.skills.map((skill, idx) => (
+                      <Badge key={idx} variant="secondary">{skill}</Badge>
                     ))}
                   </div>
                 </div>
@@ -153,14 +179,14 @@ const WorkExperienceCard = ({ experience, index }) => {
         </AnimatePresence>
       </Card>
     </motion.div>
-  )
-}
+  );
+};
 
 export default function WorkSection() {
   return (
     <ScrollArea className="h-[calc(100vh-4rem)] px-4 py-6">
       <div className="max-w-3xl mx-auto">
-        <motion.h2 
+        <motion.h2
           className="text-3xl font-bold mb-6 flex items-center"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -182,5 +208,5 @@ export default function WorkSection() {
         </div>
       </div>
     </ScrollArea>
-  )
+  );
 }

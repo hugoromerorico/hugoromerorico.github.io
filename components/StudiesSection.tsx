@@ -50,7 +50,19 @@ const certifications = [
   { name: "Principles of Machine Learning: Python Edition", institution: "Microsoft (via edX)", date: "June 2020" },
 ]
 
-const EducationCard = ({ education }) => {
+interface Education {
+  degree: string;
+  institution: string;
+  duration: string;
+  gpa?: string;
+  skills?: string[];
+  honors?: string[];
+  scholarships?: string[];
+  activities?: string[];
+  achievements?: string[];
+}
+
+const EducationCard = ({ education }: { education: Education }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (

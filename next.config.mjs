@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 
-const isProd = process.env.NODE_ENV === 'production';
+var isProd = process.env.NODE_ENV === 'production';
 
 console.log('Is production:', isProd); // Print whether it's in production mode
+isProd = false; // Force development mode
 
 const nextConfig = {
     output: 'export',

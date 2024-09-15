@@ -1,32 +1,38 @@
-import { useState } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Send, ChevronDown } from 'lucide-react'
+import { useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Send } from 'lucide-react';
+import getResponse from '@/utils/getResponse'; // Import the getResponse function
 
-const initialMessages = [
-  "Hello! I'm Hugo's AI assistant. How can I help you today?",
-  "I can provide information about Hugo's skills, experience, education, and projects. What would you like to know?"
-]
+// Define a type that supports both 'user' and 'assistant' roles
+type Message = { role: 'assistant' | 'user'; content: string };
+
+const initialMessages: Message[] = [
+  { role: 'assistant', content: "Hello! I'm Hugo's AI assistant. How can I help you today?" },
+  { role: 'assistant', content: "I can provide information about Hugo's skills, experience, education, and projects. What would you like to know?" }
+];
 
 export default function ChatSection() {
-  const [messages, setMessages] = useState(initialMessages.map(content => ({ role: 'assistant' as const, content })))
-  const [input, setInput] = useState('')
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [input, setInput] = useState('');
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim()) {
-      setMessages(prev => [...prev, { role: 'user', content: input }, { role: 'assistant', content: "I'm processing your request. Please give me a moment." }])
-      setInput('')
-      // Simulate AI response
-      setTimeout(() => {
-        setMessages(prev => [
-          ...prev.slice(0, -1),
-          { role: 'assistant', content: `Thank you for your question about ${input}. As an AI assistant, I can provide information based on Hugo's profile. Could you please be more specific about what you'd like to know regarding his skills, experience, education, or projects?` }
-        ])
-      }, 1000)
+      // Add the user's message
+      setMessages(prev => [...prev, { role: 'user', content: input }]);
+
+      // Call getResponse to get the AI's response based on the user's input
+      const botResponse = getResponse(input);
+
+      // Add the bot's response
+      setMessages(prev => [...prev, { role: 'assistant', content: botResponse }]);
+
+      // Clear the input field
+      setInput('');
     }
-  }
+  };
 
   return (
     <>
@@ -36,7 +42,7 @@ export default function ChatSection() {
             <div className={`flex ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start max-w-[80%]`}>
               <Avatar className="w-8 h-8">
                 <AvatarFallback>{message.role === 'user' ? 'U' : 'H'}</AvatarFallback>
-                <AvatarImage src={message.role === 'user' ? "/placeholder-user.jpg" : "/placeholder.svg?height=40&width=40"} />
+                <AvatarImage src={message.role === 'user' ? "/images/logo-brainn.png" : "/images/logo-brain.png?height=40&width=40"} />
               </Avatar>
               <div className={`mx-2 p-3 rounded-lg ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                 {message.content}
@@ -60,5 +66,5 @@ export default function ChatSection() {
         </form>
       </footer>
     </>
-  )
+  );
 }

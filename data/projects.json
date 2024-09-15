@@ -1,0 +1,13 @@
+{
+    "projects": [
+      {
+        "name": "Mandelbrot Set Visualizer",
+        "description": "A visualizer built with vanilla JavaScript, allowing users to enhance specific sections of the Mandelbrot set."
+      },
+      {
+        "name": "Game of Life Implementation",
+        "description": "A vanilla JavaScript implementation of Conway's Game of Life."
+      }
+    ]
+  }
+  

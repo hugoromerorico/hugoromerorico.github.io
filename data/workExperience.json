@@ -1,0 +1,88 @@
+{
+    "experiences": [
+      {
+        "title": "AI Engineer",
+        "company": "+Orange (formerly Grupo MásMóvil)",
+        "duration": "Sep 2023 - Present",
+        "transition": {
+          "from": "Grupo MásMóvil",
+          "to": "+Orange",
+          "date": "May 2024"
+        },
+        "responsibilities": [
+          "Architecting ML model solutions, including LLM-based models.",
+          "Developing MLOps pipelines for production ML deployment.",
+          "Leading partnerships with major cloud providers (VertexAI, LangChain).",
+          "Adapting AI strategies to align with the newly formed +Orange's vision."
+        ],
+        "skills": [
+          "Machine Learning",
+          "LLMs",
+          "MLOps",
+          "VertexAI",
+          "Langchain",
+          "Adaptive AI Strategy"
+        ]
+      },
+      {
+        "title": "Backend Developer",
+        "company": "Grupo MásMóvil",
+        "duration": "Apr 2023 - Sep 2023",
+        "responsibilities": [
+          "Developed vital processes critical to company operations.",
+          "Worked in dynamic cloud-native project environments."
+        ],
+        "skills": [
+          "Backend Development",
+          "Cloud-native",
+          "Microservices"
+        ]
+      },
+      {
+        "title": "DevOps - Data Engineer Trainee",
+        "company": "Grupo MásMóvil",
+        "duration": "Oct 2022 - Apr 2023",
+        "responsibilities": [
+          "Automated ETL pipelines and deployed BigQuery solutions.",
+          "Developed DataStudio dashboards to analyze cloud costs."
+        ],
+        "skills": [
+          "DevOps",
+          "ETL",
+          "BigQuery",
+          "DataStudio",
+          "Cloud Cost Analysis"
+        ]
+      },
+      {
+        "title": "Machine Learning Researcher",
+        "company": "Universidad Carlos III de Madrid",
+        "duration": "Sep 2022 - Jun 2023",
+        "responsibilities": [
+          "Researched game theory and data management.",
+          "Coordinated international project collaborations."
+        ],
+        "skills": [
+          "Machine Learning",
+          "Game Theory",
+          "Data Management",
+          "Research"
+        ]
+      },
+      {
+        "title": "Digital Business Developer",
+        "company": "Grupo Santa María",
+        "duration": "Jun 2019 - Aug 2019",
+        "responsibilities": [
+          "Co-created innovative digital products.",
+          "Developed mobile apps with a multidisciplinary team."
+        ],
+        "skills": [
+          "Digital Product Development",
+          "Mobile App Development",
+          "Team Collaboration"
+        ]
+      }
+    ]
+  }
+  

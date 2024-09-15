@@ -1,0 +1,49 @@
+{
+    "education": [
+      {
+        "degree": "Online Master's in Artificial Intelligence and Innovation",
+        "institution": "Founderz & Microsoft",
+        "duration": "July 2023 – Present",
+        "keySkills": [
+          "Artificial Intelligence",
+          "Machine Learning",
+          "Python Programming",
+          "Innovation Development"
+        ]
+      },
+      {
+        "degree": "Dual Bachelor's Degree in Computer Science & Engineering and Business Administration & Management",
+        "institution": "Universidad Carlos III de Madrid",
+        "duration": "September 2017 – February 2023",
+        "gpa": "8.33/10",
+        "honors": [
+          "Programming",
+          "Data Structures and Algorithms",
+          "Statistics II",
+          "Game Theory",
+          "Computer Networks",
+          "Advanced Computational Theory",
+          "Operating Systems Design",
+          "Machine Learning"
+        ],
+        "scholarships": [
+          "Excellence Scholarship from Comunidad de Madrid (2019–2022)"
+        ],
+        "activities": [
+          "Class Representative (2019/2020)",
+          "Madrid University Beach Volleyball Champion (2021/2022)",
+          "Madrid University Volleyball Champion (2022/2023)"
+        ]
+      },
+      {
+        "degree": "First Year in Mathematical Engineering",
+        "institution": "Universidad Complutense de Madrid",
+        "duration": "September 2015 – June 2016",
+        "activities": [
+          "Mentor for new students",
+          "Volleyball Team Player and Coach"
+        ]
+      }
+    ]
+}
+  

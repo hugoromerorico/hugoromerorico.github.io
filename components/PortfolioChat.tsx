@@ -3,19 +3,21 @@
 import { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Brain, GraduationCap, Briefcase, Rocket } from 'lucide-react'
+import { Brain, GraduationCap, Briefcase, Rocket, Info } from 'lucide-react'
 import ChatSection from './ChatSection'
 import StudiesSection from './StudiesSection'
 import WorkSection from './WorkSection'
 import ProjectsSection from './ProjectsSection'
+import AboutMeSection from './AboutSection'
 
-type Theme = 'chat' | 'studies' | 'work' | 'projects'
+type Theme = 'chat' | 'studies' | 'work' | 'projects' | 'about'
 
 const themeData: Record<Theme, { title: string }> = {
   chat: { title: "Chat with Hugo's AI Assistant" },
   studies: { title: "Educational Background" },
   work: { title: "Professional Experience" },
-  projects: { title: "Projects" }
+  projects: { title: "Projects" },
+  about: { title: "About Me" },  // Added about theme
 }
 
 export default function Component() {
@@ -29,6 +31,8 @@ export default function Component() {
         return <WorkSection />
       case 'projects':
         return <ProjectsSection />
+      case 'about':  // Added case for 'about'
+        return <AboutMeSection />
       default:
         return <ChatSection />
     }
@@ -61,6 +65,10 @@ export default function Component() {
           <Button variant={currentTheme === 'projects' ? "secondary" : "ghost"} className="w-full justify-start" onClick={() => setCurrentTheme('projects')}>
             <Rocket className="mr-2 h-4 w-4" />
             Projects
+          </Button>
+          <Button variant={currentTheme === 'about' ? "secondary" : "ghost"} className="w-full justify-start" onClick={() => setCurrentTheme('about')}>
+            <Info className="mr-2 h-4 w-4" />
+            About Me
           </Button>
         </nav>
       </div>

@@ -42,8 +42,8 @@ export default function Component() {
     <div className="flex h-screen bg-background text-foreground">
       <div className="w-64 bg-muted p-4 hidden md:block">
         <div className="mb-4">
-          <Avatar className="w-12 h-12 mb-2">
-            <AvatarImage src="/placeholder.svg?height=40&width=40" alt="Hugo Romero" />
+          <Avatar className="w-14 h-16 mb-2">
+            <AvatarImage src="/images/hugo-photo.png?height=40&width=40" alt="Hugo Romero" />
             <AvatarFallback>HR</AvatarFallback>
           </Avatar>
           <h2 className="text-lg font-semibold">Hugo Romero</h2>

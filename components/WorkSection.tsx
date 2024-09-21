@@ -46,7 +46,7 @@ const workExperience: Experience[] = [
       "Leading partnerships with major cloud providers (VertexAI, Langchain)",
       "Adapting AI strategies to align with the newly formed +Orange's vision"
     ],
-    skills: ["Machine Learning", "LLMs", "MLOps", "VertexAI", "Langchain", "Adaptive AI Strategy"]
+    skills: ["Machine Learning", "LLMs", "MLOps", "VertexAI", "Langchain", "Adaptive AI Strategy", "Google Cloud Platform", "CI/CD"]
   },
   {
     title: "Backend Developer",
@@ -100,7 +100,7 @@ interface CompanyTransitionProps {
 
 const CompanyTransition: React.FC<CompanyTransitionProps> = ({ transitionInfo }) => (
   <motion.div
-    className="flex items-center justify-center my-4 p-4 bg-gradient-to-r from-blue-100 to-orange-100 rounded-lg"
+    className="flex items-center justify-center my-4 p-4 bg-gradient-to-r from-blue-100 to-orange-200 rounded-lg"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5 }}

@@ -42,7 +42,7 @@ export default function ChatSection() {
             <div className={`flex ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start max-w-[80%]`}>
               <Avatar className="w-8 h-8">
                 <AvatarFallback>{message.role === 'user' ? 'U' : 'H'}</AvatarFallback>
-                <AvatarImage src={message.role === 'user' ? "/images/logo-brainn.png" : "/images/logo-brain.png?height=40&width=40"} />
+                <AvatarImage src={message.role === 'user' ? "/images/brain-blackbg.png" : "/images/brain-blackbg.png?height=40&width=40"} />
               </Avatar>
               <div className={`mx-2 p-3 rounded-lg ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                 {message.content}

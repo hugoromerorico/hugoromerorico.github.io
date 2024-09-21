@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Brain, GraduationCap, Briefcase, Rocket, Info, Sun, Moon } from 'lucide-react'
 import ChatSection from './ChatSection'
@@ -14,9 +13,9 @@ import AboutMeSection from './AboutSection'
 type Theme = 'chat' | 'studies' | 'work' | 'projects' | 'about'
 
 const themeData: Record<Theme, { title: string }> = {
-  chat: { title: "Chat with Hugo's AI Assistant" },
-  studies: { title: "Educational Background" },
-  work: { title: "Professional Experience" },
+  chat: { title: "Chat" },
+  studies: { title: "Studies" },
+  work: { title: "Work" },
   projects: { title: "Projects" },
   about: { title: "About Me" },
 }
@@ -48,42 +47,36 @@ export default function PortfolioChat() {
   if (!mounted) return null
 
   return (
-    <div className="flex h-screen bg-background text-foreground">
-      <div className="w-64 bg-muted p-4 hidden md:block relative">
-        <div className="mb-4">
-          <Avatar className="w-14 h-16 mb-2">
-            <AvatarImage src="/images/hugo-photo.png" alt="Hugo Romero" />
-            <AvatarFallback>HR</AvatarFallback>
-          </Avatar>
+    <div className={`flex h-screen ${theme === 'dark' ? 'bg-chatgpt-dark text-white' : 'bg-white text-black'}`}>
+      <div className={`w-64 ${theme === 'dark' ? 'bg-chatgpt-sidebar' : 'bg-gray-100'} p-4 hidden md:block relative`}>
+        <div className="mb-6 relative">
+          <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-lg mb-2">
+            <img src="/images/hugo-photo.png" alt="Hugo Romero" className="w-full h-full object-cover" />
+          </div>
           <h2 className="text-lg font-semibold">Hugo Romero</h2>
-          <p className="text-sm text-muted-foreground">AI Engineer</p>
+          <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>AI Engineer</p>
         </div>
         <nav className="space-y-2">
-          <Button variant={currentTheme === 'chat' ? "secondary" : "ghost"} className="w-full justify-start" onClick={() => setCurrentTheme('chat')}>
-            <Brain className="mr-2 h-4 w-4" />
-            Chat
-          </Button>
-          <Button variant={currentTheme === 'studies' ? "secondary" : "ghost"} className="w-full justify-start" onClick={() => setCurrentTheme('studies')}>
-            <GraduationCap className="mr-2 h-4 w-4" />
-            Studies
-          </Button>
-          <Button variant={currentTheme === 'work' ? "secondary" : "ghost"} className="w-full justify-start" onClick={() => setCurrentTheme('work')}>
-            <Briefcase className="mr-2 h-4 w-4" />
-            Work
-          </Button>
-          <Button variant={currentTheme === 'projects' ? "secondary" : "ghost"} className="w-full justify-start" onClick={() => setCurrentTheme('projects')}>
-            <Rocket className="mr-2 h-4 w-4" />
-            Projects
-          </Button>
-          <Button variant={currentTheme === 'about' ? "secondary" : "ghost"} className="w-full justify-start" onClick={() => setCurrentTheme('about')}>
-            <Info className="mr-2 h-4 w-4" />
-            About Me
-          </Button>
+          {Object.entries(themeData).map(([key, { title }]) => (
+            <Button
+              key={key}
+              variant={currentTheme === key ? "secondary" : "ghost"}
+              className={`w-full justify-start ${theme === 'dark' ? 'text-white hover:bg-chatgpt-hover' : 'text-black hover:bg-gray-200'}`}
+              onClick={() => setCurrentTheme(key as Theme)}
+            >
+              {key === 'chat' && <Brain className="mr-2 h-4 w-4" />}
+              {key === 'studies' && <GraduationCap className="mr-2 h-4 w-4" />}
+              {key === 'work' && <Briefcase className="mr-2 h-4 w-4" />}
+              {key === 'projects' && <Rocket className="mr-2 h-4 w-4" />}
+              {key === 'about' && <Info className="mr-2 h-4 w-4" />}
+              {title}
+            </Button>
+          ))}
         </nav>
         <Button
           variant="ghost"
           size="icon"
-          className="absolute bottom-4 left-4"
+          className={`absolute bottom-4 left-4 ${theme === 'dark' ? 'text-white hover:bg-chatgpt-hover' : 'text-black hover:bg-gray-200'}`}
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         >
           {theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
@@ -91,10 +84,12 @@ export default function PortfolioChat() {
         </Button>
       </div>
       <div className="flex-1 flex flex-col">
-        <header className="flex items-center justify-between p-4 border-b">
+        <header className={`flex items-center justify-between p-4 border-b ${theme === 'dark' ? 'border-gray-600' : 'border-gray-200'}`}>
           <h1 className="text-xl font-semibold">{themeData[currentTheme].title}</h1>
         </header>
-        {renderContent()}
+        <div className={`flex-1 overflow-hidden ${theme === 'dark' ? 'bg-dots-dark' : 'bg-dots-light'}`}>
+          {renderContent()}
+        </div>
       </div>
     </div>
   )

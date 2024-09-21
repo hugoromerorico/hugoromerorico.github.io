@@ -27,11 +27,11 @@
   }
  
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 220 20% 10%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 220 20% 10%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 220 20% 10%;
     --popover-foreground: 210 40% 98%;
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 47.4% 11.2%;
@@ -56,4 +56,26 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.bg-chatgpt-dark {
+  background-color: #343541;
+}
+
+.bg-chatgpt-sidebar {
+  background-color: #202123;
+}
+
+.bg-chatgpt-hover:hover {
+  background-color: #2A2B32;
+}
+
+.bg-dots-dark {
+  background-image: radial-gradient(circle, #ffffff10 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.bg-dots-light {
+  background-image: radial-gradient(circle, #00000010 1px, transparent 1px);
+  background-size: 24px 24px;
 }

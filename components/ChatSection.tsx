@@ -1,12 +1,10 @@
-import { useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState, useRef, useEffect } from 'react';
+import { useTheme } from 'next-themes'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send } from 'lucide-react';
-import getResponse from '@/utils/getResponse'; // Import the getResponse function
+import getResponse from '@/utils/getResponse';
 
-// Define a type that supports both 'user' and 'assistant' roles
 type Message = { role: 'assistant' | 'user'; content: string };
 
 const initialMessages: Message[] = [
@@ -17,54 +15,50 @@ const initialMessages: Message[] = [
 export default function ChatSection() {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme()
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(scrollToBottom, [messages]);
 
   const handleSend = async () => {
     if (input.trim()) {
-      // Add the user's message
       setMessages(prev => [...prev, { role: 'user', content: input }]);
-
-      // Call getResponse to get the AI's response based on the user's input
       const botResponse = getResponse(input);
-
-      // Add the bot's response
       setMessages(prev => [...prev, { role: 'assistant', content: botResponse }]);
-
-      // Clear the input field
       setInput('');
     }
   };
 
   return (
-    <>
-      <ScrollArea className="flex-1 p-4">
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-auto p-4">
         {messages.map((message, index) => (
           <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-4`}>
-            <div className={`flex ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start max-w-[80%]`}>
-              <Avatar className="w-8 h-8">
-                <AvatarFallback>{message.role === 'user' ? 'U' : 'H'}</AvatarFallback>
-                <AvatarImage src={message.role === 'user' ? "/images/brain-blackbg.png" : "/images/brain-blackbg.png?height=40&width=40"} />
-              </Avatar>
-              <div className={`mx-2 p-3 rounded-lg ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                {message.content}
-              </div>
+            <div className={`max-w-[80%] ${message.role === 'user' ? 'bg-primary text-primary-foreground rounded-lg p-3' : ''}`}>
+              {message.content}
             </div>
           </div>
         ))}
-      </ScrollArea>
-      <footer className="p-4 border-t">
+        <div ref={messagesEndRef} />
+      </div>
+      <footer className={`p-4 border-t ${theme === 'dark' ? 'bg-chatgpt-dark border-gray-600' : 'bg-white border-gray-200'}`}>
         <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="flex items-center">
           <Input
             placeholder="Ask about Hugo's skills, experience, or projects..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="flex-1 mr-2"
+            className={`flex-1 mr-2 ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'}`}
           />
-          <Button type="submit" size="icon">
+          <Button type="submit" variant="ghost" size="icon" className={theme === 'dark' ? 'text-white hover:bg-gray-700' : 'text-black hover:bg-gray-200'}>
             <Send className="h-4 w-4" />
             <span className="sr-only">Send</span>
           </Button>
         </form>
       </footer>
-    </>
+    </div>
   );
 }

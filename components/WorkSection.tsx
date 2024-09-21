@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Briefcase, ArrowRight } from 'lucide-react';
 
-// Define interfaces for typing the work experience data
 interface TransitionInfo {
   from: { name: string; logo: string };
   to: { name: string; logo: string };
@@ -28,15 +27,15 @@ const workExperience: Experience[] = [
     title: "AI Engineer",
     company: "+Orange (formerly Grupo MásMóvil)",
     duration: "Sep 2023 - Present",
-    logo: "/images/mas-orange.png?height=50&width=50",
+    logo: "/images/mas-orange.png",
     transitionInfo: {
       from: {
         name: "Grupo MásMóvil",
-        logo: "/images/mas-movil.png?height=30&width=30"
+        logo: "/images/mas-movil.png"
       },
       to: {
         name: "+Orange",
-        logo: "/images/mas-orange.png?height=30&width=30"
+        logo: "/images/mas-orange.png"
       },
       date: "May 2024"
     },
@@ -52,7 +51,7 @@ const workExperience: Experience[] = [
     title: "Backend Developer",
     company: "Grupo MásMóvil",
     duration: "Apr 2023 - Sep 2023",
-    logo: "/images/mas-movil.png?height=50&width=50",
+    logo: "/images/mas-movil.png",
     responsibilities: [
       "Developed vital processes critical to company operations",
       "Worked in dynamic cloud-native project environments"
@@ -63,7 +62,7 @@ const workExperience: Experience[] = [
     title: "DevOps - Data Engineer Trainee",
     company: "Grupo MásMóvil",
     duration: "Oct 2022 - Apr 2023",
-    logo: "/images/mas-movil.png?height=50&width=50",
+    logo: "/images/mas-movil.png",
     responsibilities: [
       "Automated ETL pipelines and deployed BigQuery solutions",
       "Developed DataStudio dashboards to analyze cloud costs"
@@ -74,7 +73,7 @@ const workExperience: Experience[] = [
     title: "Machine Learning Researcher",
     company: "Universidad Carlos III de Madrid",
     duration: "Sep 2022 - Jun 2023",
-    logo: "/images/uc3m.png?height=50&width=50",
+    logo: "/images/uc3m.png",
     responsibilities: [
       "Researched game theory and data management",
       "Coordinated international project collaborations"
@@ -85,7 +84,7 @@ const workExperience: Experience[] = [
     title: "Digital Business Developer",
     company: "Grupo Santa María",
     duration: "Jun 2019 - Aug 2019",
-    logo: "/images/grupo-sm.png?height=50&width=50",
+    logo: "/images/grupo-sm.png",
     responsibilities: [
       "Co-created innovative digital products",
       "Developed mobile apps with a multidisciplinary team"
@@ -94,13 +93,9 @@ const workExperience: Experience[] = [
   }
 ];
 
-interface CompanyTransitionProps {
-  transitionInfo: TransitionInfo;
-}
-
-const CompanyTransition: React.FC<CompanyTransitionProps> = ({ transitionInfo }) => (
+const CompanyTransition: React.FC<{ transitionInfo: TransitionInfo }> = ({ transitionInfo }) => (
   <motion.div
-    className="flex items-center justify-center my-4 p-4 bg-gradient-to-r from-blue-100 to-orange-200 rounded-lg"
+    className="flex items-center justify-center my-4 p-4 bg-gradient-to-r from-blue-100 to-orange-100 rounded-lg"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5 }}
@@ -118,13 +113,8 @@ const CompanyTransition: React.FC<CompanyTransitionProps> = ({ transitionInfo })
   </motion.div>
 );
 
-interface WorkExperienceCardProps {
-  experience: Experience;
-  index: number;
-}
-
-const WorkExperienceCard: React.FC<WorkExperienceCardProps> = ({ experience, index }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const WorkExperienceCard: React.FC<{ experience: Experience; index: number; defaultExpanded: boolean }> = ({ experience, index, defaultExpanded }) => {
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
   return (
     <motion.div
@@ -132,7 +122,7 @@ const WorkExperienceCard: React.FC<WorkExperienceCardProps> = ({ experience, ind
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <Card className="mb-4 overflow-hidden">
+      <Card className="mb-4 overflow-hidden border-l-4 border-primary">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex items-center">
             <img src={experience.logo} alt={experience.company} className="w-12 h-12 mr-4 rounded-full" />
@@ -185,7 +175,7 @@ const WorkExperienceCard: React.FC<WorkExperienceCardProps> = ({ experience, ind
 export default function WorkSection() {
   return (
     <ScrollArea className="h-[calc(100vh-4rem)] px-4 py-6">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <motion.h2
           className="text-3xl font-bold mb-6 flex items-center"
           initial={{ opacity: 0, y: -20 }}
@@ -196,14 +186,14 @@ export default function WorkSection() {
           Professional Experience
         </motion.h2>
         
-        <div className="relative">
-          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-orange-500" />
+        <div className="space-y-4">
           {workExperience.map((experience, index) => (
-            <div key={index} className="relative pl-8">
-              <div className="absolute left-0 top-6 w-8 h-0.5 bg-gradient-to-r from-blue-500 to-orange-500" />
-              <div className="absolute left-0 top-4 w-4 h-4 rounded-full bg-gradient-to-br from-blue-500 to-orange-500" />
-              <WorkExperienceCard experience={experience} index={index} />
-            </div>
+            <WorkExperienceCard 
+              key={index} 
+              experience={experience} 
+              index={index} 
+              defaultExpanded={index === 0} // AI Engineer role is expanded by default
+            />
           ))}
         </div>
       </div>

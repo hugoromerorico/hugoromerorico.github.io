@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTheme } from 'next-themes'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send, Brain } from 'lucide-react';
@@ -39,12 +41,35 @@ export default function ChatSection() {
         {messages.map((message, index) => (
           <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-4`}>
             {message.role === 'assistant' && (
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center mr-2">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center mr-2 flex-shrink-0">
                 <Brain className="w-5 h-5 text-primary-foreground" />
               </div>
             )}
             <div className={`max-w-[80%] ${message.role === 'user' ? 'bg-primary text-primary-foreground rounded-lg p-3' : 'text-secondary-foreground rounded-lg p-3'}`}>
-              {message.content}
+              {message.role === 'assistant' ? (
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    p: ({node, ...props}) => <p className="mb-2" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc list-inside mb-2" {...props} />,
+                    ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-2" {...props} />,
+                    li: ({node, ...props}) => <li className="mb-1" {...props} />,
+                    a: ({node, ...props}) => <a className="text-blue-500 hover:underline" {...props} />,
+                    code: ({node, inline, ...props}) => 
+                      inline ? (
+                        <code className="bg-gray-200 dark:bg-gray-700 rounded px-1" {...props} />
+                      ) : (
+                        <pre className="bg-gray-200 dark:bg-gray-700 rounded p-2 overflow-x-auto">
+                          <code {...props} />
+                        </pre>
+                      ),
+                  }}
+                >
+                  {message.content}
+                </ReactMarkdown>
+              ) : (
+                message.content
+              )}
             </div>
           </div>
         ))}

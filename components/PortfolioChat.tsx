@@ -116,6 +116,7 @@ export default function PortfolioChat() {
       <div className="flex-1 flex flex-col">
         <header className={`flex items-center justify-between p-4 border-b ${theme === 'dark' ? 'border-gray-600' : 'border-gray-200'}`}>
           <h1 className="text-xl font-semibold">{themeData[currentTheme].title}</h1>
+          <span className="text-sm text-gray-500 italic">This portfolio is still under development :)</span>
         </header>
         <div className={`flex-1 overflow-hidden ${theme === 'dark' ? 'bg-dots-dark' : 'bg-dots-light'}`}>
           {renderContent()}

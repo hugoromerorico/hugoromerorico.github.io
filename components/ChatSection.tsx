@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
-import { useTheme } from 'next-themes'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import { useTheme } from 'next-themes';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send, Brain } from 'lucide-react';
 import getResponse from '@/utils/getResponse';
+import React from 'react';
 
 type Message = { role: 'assistant' | 'user'; content: string };
 
@@ -18,7 +19,7 @@ export default function ChatSection() {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -47,27 +48,34 @@ export default function ChatSection() {
             )}
             <div className={`max-w-[80%] ${message.role === 'user' ? 'bg-primary text-primary-foreground rounded-lg p-3' : 'text-secondary-foreground rounded-lg p-3'}`}>
               {message.role === 'assistant' ? (
-                <ReactMarkdown 
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  p: (props) => <p className="mb-2" {...props} />,
-                  ul: (props) => <ul className="list-disc list-inside mb-2" {...props} />,
-                  ol: (props) => <ol className="list-decimal list-inside mb-2" {...props} />,
-                  li: (props) => <li className="mb-1" {...props} />,
-                  a: (props) => <a className="text-blue-500 hover:underline" {...props} />,
-                  code: ({ inline, ...props }) => 
-                    inline ? (
-                      <code className="bg-gray-200 dark:bg-gray-700 rounded px-1" {...props} />
-                    ) : (
-                      <pre className="bg-gray-200 dark:bg-gray-700 rounded p-2 overflow-x-auto">
-                        <code {...props} />
-                      </pre>
-                    ),
-                }}
-              >
-                {message.content}
-              </ReactMarkdown>
-              
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    p: (props) => <p className="mb-2" {...props} />,
+                    ul: (props) => <ul className="list-disc list-inside mb-2" {...props} />,
+                    ol: (props) => <ol className="list-decimal list-inside mb-2" {...props} />,
+                    li: (props) => <li className="mb-1" {...props} />,
+                    a: (props) => <a className="text-blue-500 hover:underline" {...props} />,
+                    code: ({ children, ...props }) => {
+                      const childrenArray = React.Children.toArray(children); // Convert to array safely
+                      const isInline = childrenArray.length === 1; // Now it's safe to check length
+                    
+                      return isInline ? (
+                        <code className="bg-gray-200 dark:bg-gray-700 rounded px-1" {...props}>
+                          {childrenArray}
+                        </code>
+                      ) : (
+                        <pre className="bg-gray-200 dark:bg-gray-700 rounded p-2 overflow-x-auto">
+                          <code {...props}>
+                            {childrenArray}
+                          </code>
+                        </pre>
+                      );
+                    },
+                  }}
+                >
+                  {message.content}
+                </ReactMarkdown>
               ) : (
                 message.content
               )}

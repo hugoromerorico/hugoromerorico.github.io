@@ -4,7 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, ChevronUp, GraduationCap, Award, FileBadge } from 'lucide-react'
+import { ChevronDown, ChevronUp, GraduationCap, FileBadge } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const educationData = [

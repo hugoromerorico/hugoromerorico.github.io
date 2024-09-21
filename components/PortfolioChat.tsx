@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useTheme } from 'next-themes'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Brain, GraduationCap, Briefcase, Rocket, Info } from 'lucide-react'
+import { Brain, GraduationCap, Briefcase, Rocket, Info, Sun, Moon } from 'lucide-react'
 import ChatSection from './ChatSection'
 import StudiesSection from './StudiesSection'
 import WorkSection from './WorkSection'
@@ -17,11 +18,17 @@ const themeData: Record<Theme, { title: string }> = {
   studies: { title: "Educational Background" },
   work: { title: "Professional Experience" },
   projects: { title: "Projects" },
-  about: { title: "About Me" },  // Added about theme
+  about: { title: "About Me" },
 }
 
-export default function Component() {
+export default function PortfolioChat() {
   const [currentTheme, setCurrentTheme] = useState<Theme>('chat')
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const renderContent = () => {
     switch (currentTheme) {
@@ -31,19 +38,21 @@ export default function Component() {
         return <WorkSection />
       case 'projects':
         return <ProjectsSection />
-      case 'about':  // Added case for 'about'
+      case 'about':
         return <AboutMeSection />
       default:
         return <ChatSection />
     }
   }
 
+  if (!mounted) return null
+
   return (
     <div className="flex h-screen bg-background text-foreground">
-      <div className="w-64 bg-muted p-4 hidden md:block">
+      <div className="w-64 bg-muted p-4 hidden md:block relative">
         <div className="mb-4">
           <Avatar className="w-14 h-16 mb-2">
-            <AvatarImage src="/images/hugo-photo.png?height=40&width=40" alt="Hugo Romero" />
+            <AvatarImage src="/images/hugo-photo.png" alt="Hugo Romero" />
             <AvatarFallback>HR</AvatarFallback>
           </Avatar>
           <h2 className="text-lg font-semibold">Hugo Romero</h2>
@@ -71,6 +80,15 @@ export default function Component() {
             About Me
           </Button>
         </nav>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute bottom-4 left-4"
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        >
+          {theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
+          <span className="sr-only">Toggle theme</span>
+        </Button>
       </div>
       <div className="flex-1 flex flex-col">
         <header className="flex items-center justify-between p-4 border-b">

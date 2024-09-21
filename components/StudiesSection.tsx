@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTheme } from 'next-themes'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -22,7 +23,11 @@ const educationData = [
       "Programming", "Data Structures and Algorithms", "Statistics II", "Game Theory",
       "Computer Networks", "Advanced Computational Theory", "Operating Systems Design", "Machine Learning"
     ],
-    scholarships: ["Excellence Scholarship from Comunidad de Madrid (2019–2022)"],
+    scholarships: [
+      "Excellence Scholarship from Comunidad de Madrid (2019–2020)",
+      "Excellence Scholarship from Comunidad de Madrid (2020–2021)",
+      "Excellence Scholarship from Comunidad de Madrid (2021–2022)",
+    ],
     activities: ["Class Representative (2019/2020)"],
     achievements: [
       "Madrid University Beach Volleyball Champion (2021/2022)",
@@ -38,16 +43,16 @@ const educationData = [
 ]
 
 const certifications = [
-  { name: "Prompt Engineering & LangChain for Developers", institution: "The Valley", date: "November 2023" },
-  { name: "Automated Testing for LLMOps", institution: "DeepLearning.AI", date: "September 2024" },
-  { name: "Networking in Google Cloud: Fundamentals", institution: "Google Cloud Skills Boost", date: "September 2024" },
-  { name: "Introduction to AI and Machine Learning on Google Cloud", institution: "Google Cloud Skills Boost", date: "February 2024" },
-  { name: "TensorFlow on Google Cloud", institution: "Google Cloud Skills Boost", date: "February 2024" },
-  { name: "Automating Infrastructure on Google Cloud with Terraform", institution: "Google Cloud Skills Boost", date: "January 2024" },
-  { name: "Technical Writing One", institution: "Google Developers", date: "October 2023" },
-  { name: "ChatGPT Prompt Engineering for Developers", institution: "DeepLearning.AI", date: "May 2023" },
-  { name: "GANs Specialization", institution: "DeepLearning.AI", date: "January 2022" },
-  { name: "Principles of Machine Learning: Python Edition", institution: "Microsoft (via edX)", date: "June 2020" },
+  { name: "Prompt Engineering & LangChain for Developers", institution: "The Valley", date: "November 2023", category: "AI" },
+  { name: "Automated Testing for LLMOps", institution: "DeepLearning.AI", date: "September 2024", category: "AI" },
+  { name: "Networking in Google Cloud: Fundamentals", institution: "Google Cloud Skills Boost", date: "September 2024", category: "Cloud" },
+  { name: "Introduction to AI and Machine Learning on Google Cloud", institution: "Google Cloud Skills Boost", date: "February 2024", category: "AI" },
+  { name: "TensorFlow on Google Cloud", institution: "Google Cloud Skills Boost", date: "February 2024", category: "AI" },
+  { name: "Automating Infrastructure on Google Cloud with Terraform", institution: "Google Cloud Skills Boost", date: "January 2024", category: "Cloud" },
+  { name: "Technical Writing One", institution: "Google Developers", date: "October 2023", category: "Soft Skills" },
+  { name: "ChatGPT Prompt Engineering for Developers", institution: "DeepLearning.AI", date: "May 2023", category: "AI" },
+  { name: "GANs Specialization", institution: "DeepLearning.AI", date: "January 2022", category: "AI" },
+  { name: "Principles of Machine Learning: Python Edition", institution: "Microsoft (via edX)", date: "June 2020", category: "AI" },
 ]
 
 interface Education {
@@ -64,20 +69,18 @@ interface Education {
 
 const EducationCard = ({ education }: { education: Education }) => {
   const [isExpanded, setIsExpanded] = useState(false)
+  const { theme } = useTheme()
 
   return (
-    <Card className="mb-4">
-      <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          <div>
-            <GraduationCap className="inline-block mr-2" />
-            {education.degree}
-          </div>
-          <Button variant="ghost" size="sm" onClick={() => setIsExpanded(!isExpanded)}>
-            {isExpanded ? <ChevronUp /> : <ChevronDown />}
-          </Button>
-        </CardTitle>
-        <CardDescription>{education.institution} | {education.duration}</CardDescription>
+    <Card className={`mb-4 overflow-hidden border-l-4 ${theme === 'dark' ? 'border-primary bg-gray-800' : 'border-primary bg-white'}`}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <div>
+          <CardTitle>{education.degree}</CardTitle>
+          <CardDescription>{education.institution} | {education.duration}</CardDescription>
+        </div>
+        <Button variant="ghost" size="sm" onClick={() => setIsExpanded(!isExpanded)}>
+          {isExpanded ? <ChevronUp /> : <ChevronDown />}
+        </Button>
       </CardHeader>
       <AnimatePresence>
         {isExpanded && (
@@ -147,78 +150,63 @@ const EducationCard = ({ education }: { education: Education }) => {
   )
 }
 
+const CertificationCard = ({ certification }: { certification: { name: string; institution: string; date: string; category: string } }) => {
+  const { theme } = useTheme()
+  const categoryColors = {
+    AI: 'bg-blue-500',
+    Cloud: 'bg-green-500',
+    'Soft Skills': 'bg-yellow-500'
+  }
+
+  return (
+    <Card className={`mb-2 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+      <CardContent className="p-4 flex items-center justify-between">
+        <div>
+          <h3 className="font-semibold">{certification.name}</h3>
+          <p className="text-sm text-muted-foreground">{certification.institution} | {certification.date}</p>
+        </div>
+        <Badge className={`${categoryColors[certification.category as keyof typeof categoryColors]} text-white`}>
+          {certification.category}
+        </Badge>
+      </CardContent>
+    </Card>
+  )
+}
+
 export default function StudiesSection() {
-  const [showCertifications, setShowCertifications] = useState(false)
+  const { theme } = useTheme()
 
   return (
     <ScrollArea className="h-[calc(100vh-4rem)] px-4 py-6">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold mb-6 flex items-center">
+      <div className="max-w-4xl mx-auto">
+        <motion.h2
+          className={`text-3xl font-bold mb-6 flex items-center ${
+            theme === 'dark' ? 'text-white' : 'text-black'
+          }`}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <GraduationCap className="mr-2" />
           Educational Background
-        </h2>
+        </motion.h2>
         
         {educationData.map((edu, index) => (
           <EducationCard key={index} education={edu} />
         ))}
 
-        <Card className="mb-4">
-          <CardHeader>
-            <CardTitle className="flex justify-between items-center">
-              <div>
-                <FileBadge className="inline-block mr-2" />
-                Certifications & Courses
-              </div>
-              <Button variant="ghost" size="sm" onClick={() => setShowCertifications(!showCertifications)}>
-                {showCertifications ? <ChevronUp /> : <ChevronDown />}
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <AnimatePresence>
-            {showCertifications && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <CardContent>
-                  {certifications.map((cert, index) => (
-                    <div key={index} className="mb-2">
-                      <strong>{cert.name}</strong>
-                      <p className="text-sm text-muted-foreground">{cert.institution} | {cert.date}</p>
-                    </div>
-                  ))}
-                </CardContent>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </Card>
-
-        <Card>
+        <Card className={`mb-4 overflow-hidden border-l-4 ${theme === 'dark' ? 'border-primary bg-gray-800' : 'border-primary bg-white'}`}>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Award className="mr-2" />
-              Skills & Achievements
+              <FileBadge className="mr-2" />
+              Certifications & Courses
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="mb-4">
-              <strong>Key Skills:</strong>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {["Python", "Java", "Machine Learning", "Deep Learning", "GANs", "LLMs", "AI Operations", "Google Cloud Platform", "Microsoft Azure", "TensorFlow", "Keras", "LangChain", "Terraform"].map((skill, index) => (
-                  <Badge key={index} variant="secondary">{skill}</Badge>
-                ))}
-              </div>
-            </div>
-            <div>
-              <strong>Achievements:</strong>
-              <ul className="list-disc list-inside mt-1">
-                <li>8 Distinctions (Matrículas de Honor) in various subjects</li>
-                <li>Excellence Scholarships from Comunidad de Madrid (2019-2022)</li>
-                <li>Madrid University Beach Volleyball Champion (2021/2022)</li>
-                <li>Madrid University Volleyball Champion (2022/2023)</li>
-              </ul>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {certifications.map((cert, index) => (
+                <CertificationCard key={index} certification={cert} />
+              ))}
             </div>
           </CardContent>
         </Card>

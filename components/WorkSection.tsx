@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from 'next-themes';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -93,28 +94,39 @@ const workExperience: Experience[] = [
   }
 ];
 
-const CompanyTransition: React.FC<{ transitionInfo: TransitionInfo }> = ({ transitionInfo }) => (
-  <motion.div
-    className="flex items-center justify-center my-4 p-4 bg-gradient-to-r from-blue-100 to-orange-100 rounded-lg"
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-  >
-    <div className="flex items-center">
-      <img src={transitionInfo.from.logo} alt={transitionInfo.from.name} className="w-8 h-8 mr-2" />
-      <span className="font-semibold">{transitionInfo.from.name}</span>
-    </div>
-    <ArrowRight className="mx-4 text-orange-500" />
-    <div className="flex items-center">
-      <img src={transitionInfo.to.logo} alt={transitionInfo.to.name} className="w-8 h-8 mr-2" />
-      <span className="font-semibold">{transitionInfo.to.name}</span>
-    </div>
-    <span className="ml-4 text-sm text-gray-600">({transitionInfo.date})</span>
-  </motion.div>
-);
+const CompanyTransition: React.FC<{ transitionInfo: TransitionInfo }> = ({ transitionInfo }) => {
+  const { theme } = useTheme();
+
+  return (
+    <motion.div
+      className={`flex items-center justify-center my-4 p-4 rounded-lg ${
+        theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
+      }`}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="flex items-center">
+        <div className="w-8 h-8 rounded-full overflow-hidden mr-2">
+          <img src={transitionInfo.from.logo} alt={transitionInfo.from.name} className="w-full h-full object-cover" />
+        </div>
+        <span className="font-semibold">{transitionInfo.from.name}</span>
+      </div>
+      <ArrowRight className="mx-4 text-primary" />
+      <div className="flex items-center">
+        <div className="w-8 h-8 rounded-full overflow-hidden mr-2">
+          <img src={transitionInfo.to.logo} alt={transitionInfo.to.name} className="w-full h-full object-cover" />
+        </div>
+        <span className="font-semibold">{transitionInfo.to.name}</span>
+      </div>
+      <span className="ml-4 text-sm text-muted-foreground">({transitionInfo.date})</span>
+    </motion.div>
+  );
+};
 
 const WorkExperienceCard: React.FC<{ experience: Experience; index: number; defaultExpanded: boolean }> = ({ experience, index, defaultExpanded }) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+  const { theme } = useTheme();
 
   return (
     <motion.div
@@ -122,10 +134,12 @@ const WorkExperienceCard: React.FC<{ experience: Experience; index: number; defa
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <Card className="mb-4 overflow-hidden border-l-4 border-primary">
+      <Card className={`mb-4 overflow-hidden border-l-4 ${theme === 'dark' ? 'border-primary bg-gray-800' : 'border-primary bg-white'}`}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex items-center">
-            <img src={experience.logo} alt={experience.company} className="w-12 h-12 mr-4 rounded-full" />
+            <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <img src={experience.logo} alt={experience.company} className="w-full h-full object-cover" />
+            </div>
             <div>
               <CardTitle>{experience.title}</CardTitle>
               <CardDescription>{experience.company} | {experience.duration}</CardDescription>
@@ -173,11 +187,15 @@ const WorkExperienceCard: React.FC<{ experience: Experience; index: number; defa
 };
 
 export default function WorkSection() {
+  const { theme } = useTheme();
+
   return (
     <ScrollArea className="h-[calc(100vh-4rem)] px-4 py-6">
       <div className="max-w-4xl mx-auto">
         <motion.h2
-          className="text-3xl font-bold mb-6 flex items-center"
+          className={`text-3xl font-bold mb-6 flex items-center ${
+            theme === 'dark' ? 'text-white' : 'text-black'
+          }`}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}

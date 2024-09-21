@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
 import { Button } from "@/components/ui/button"
-import { Brain, GraduationCap, Briefcase, Rocket, Info, Sun, Moon } from 'lucide-react'
+import { Brain, GraduationCap, Briefcase, Rocket, Info, Sun, Moon, Linkedin, Github } from 'lucide-react'
+import { motion } from 'framer-motion'
 import ChatSection from './ChatSection'
 import StudiesSection from './StudiesSection'
 import WorkSection from './WorkSection'
@@ -73,10 +74,39 @@ export default function PortfolioChat() {
             </Button>
           ))}
         </nav>
+        <div className="absolute bottom-4 left-4 flex space-x-2">
+          <motion.a
+            href="https://www.linkedin.com/in/hugo-romero-rico/"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <Linkedin className={`h-6 w-6 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />
+          </motion.a>
+          <motion.a
+            href="https://github.com/hugo-romero-mm"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <Github className={`h-6 w-6 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />
+          </motion.a>
+          <motion.a
+            href="https://github.com/hromeroprog"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <Github className={`h-6 w-6 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />
+          </motion.a>
+        </div>
         <Button
           variant="ghost"
           size="icon"
-          className={`absolute bottom-4 left-4 ${theme === 'dark' ? 'text-white hover:bg-chatgpt-hover' : 'text-black hover:bg-gray-200'}`}
+          className={`absolute top-4 right-4 ${theme === 'dark' ? 'text-white hover:bg-chatgpt-hover' : 'text-black hover:bg-gray-200'}`}
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         >
           {theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}

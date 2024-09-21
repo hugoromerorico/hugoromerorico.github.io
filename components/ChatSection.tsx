@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useTheme } from 'next-themes'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send } from 'lucide-react';
+import { Send, Brain } from 'lucide-react';
 import getResponse from '@/utils/getResponse';
 
 type Message = { role: 'assistant' | 'user'; content: string };
@@ -38,7 +38,12 @@ export default function ChatSection() {
       <div className="flex-1 overflow-auto p-4">
         {messages.map((message, index) => (
           <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-4`}>
-            <div className={`max-w-[80%] ${message.role === 'user' ? 'bg-primary text-primary-foreground rounded-lg p-3' : ''}`}>
+            {message.role === 'assistant' && (
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center mr-2">
+                <Brain className="w-5 h-5 text-primary-foreground" />
+              </div>
+            )}
+            <div className={`max-w-[80%] ${message.role === 'user' ? 'bg-primary text-primary-foreground rounded-lg p-3' : 'text-secondary-foreground rounded-lg p-3'}`}>
               {message.content}
             </div>
           </div>

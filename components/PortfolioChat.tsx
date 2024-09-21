@@ -51,8 +51,8 @@ export default function PortfolioChat() {
     <div className={`flex h-screen ${theme === 'dark' ? 'bg-chatgpt-dark text-white' : 'bg-white text-black'}`}>
       <div className={`w-64 ${theme === 'dark' ? 'bg-chatgpt-sidebar' : 'bg-gray-100'} p-4 hidden md:block relative`}>
         <div className="mb-6 relative">
-          <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-lg mb-2">
-            <img src="/images/hugo-photo.png" alt="Hugo Romero" className="w-full h-full object-cover" />
+          <div className="w-28 h-28 rounded-full overflow-hidden border-2 border-white shadow-lg mb-2 flex items-end justify-center">
+            <img src="/images/hugo-photo.png" alt="Hugo Romero" className="w-4/5 h-9/10 object-cover" />
           </div>
           <h2 className="text-lg font-semibold">Hugo Romero</h2>
           <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>AI Engineer</p>

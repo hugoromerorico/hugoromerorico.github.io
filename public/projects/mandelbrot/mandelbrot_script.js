@@ -10,7 +10,7 @@ const defaultMinX = -2.2;
 const defaultMaxX = 1.6;
 
 $(document).ready(function(){
-    var x_scaler = 0.6;
+    var x_scaler = 0.9;
     setupCanvas(x_scaler);
     setupCanvasCursor();
 

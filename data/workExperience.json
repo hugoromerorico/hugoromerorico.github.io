@@ -12,15 +12,15 @@
         "responsibilities": [
           "Architecting ML model solutions, including LLM-based models.",
           "Developing MLOps pipelines for production ML deployment.",
-          "Leading partnerships with major cloud providers (VertexAI, LangChain).",
-          "Adapting AI strategies to align with the newly formed +Orange's vision."
+          "Creating CI/CD for the team workflows in several technologies.",
+          "Expertise in automating boring stuff"
         ],
         "skills": [
           "Machine Learning",
           "LLMs",
           "MLOps",
           "VertexAI",
-          "Langchain",
+          "CI/CD",
           "Adaptive AI Strategy"
         ]
       },
@@ -35,7 +35,8 @@
         "skills": [
           "Backend Development",
           "Cloud-native",
-          "Microservices"
+          "Microservices",
+          "Java"
         ]
       },
       {
@@ -43,12 +44,13 @@
         "company": "Grupo MásMóvil",
         "duration": "Oct 2022 - Apr 2023",
         "responsibilities": [
-          "Automated ETL pipelines and deployed BigQuery solutions.",
+          "Automated ETL pipelines for data ingestion into the Data Warehouse.",
           "Developed DataStudio dashboards to analyze cloud costs."
         ],
         "skills": [
           "DevOps",
           "ETL",
+          "Airflow",
           "BigQuery",
           "DataStudio",
           "Cloud Cost Analysis"
@@ -80,7 +82,8 @@
         "skills": [
           "Digital Product Development",
           "Mobile App Development",
-          "Team Collaboration"
+          "Team Collaboration",
+          "Agile Scrum"
         ]
       }
     ]

@@ -26,7 +26,11 @@ export async function initializeModel() {
 
     if (!answerer) {
       console.log("Creating answerer...");
-      answerer = await pipeline('question-answering', 'Xenova/distilbert-base-uncased-distilled-squad');
+      answerer = await pipeline('question-answering', 'Xenova/distilbert-base-uncased-distilled-squad', {
+        progress_callback: (progress) => {
+          console.log(`Loading model: ${Math.round(progress.progress * 100)}%`);
+        }
+      });
       console.log("Answerer created successfully");
     }
     console.log("Model initialization complete");

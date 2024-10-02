@@ -9,7 +9,7 @@ import hobbies from '../data/hobbies.json';
 let pipeline;
 let answerer = null;
 
-export async function initializeModel() {
+export async function initializeModel(progressCallback) {
   console.log("Initializing model...");
   if (typeof window === 'undefined') {
     console.log("Server-side environment detected, skipping initialization");
@@ -28,7 +28,11 @@ export async function initializeModel() {
       console.log("Creating answerer...");
       answerer = await pipeline('question-answering', 'Xenova/distilbert-base-uncased-distilled-squad', {
         progress_callback: (progress) => {
-          console.log(`Loading model: ${Math.round(progress.progress * 100)}%`);
+          if (progress.status === 'progress') {
+            const percentage = Math.round((progress.loaded / progress.total) * 100);
+            console.log(`Loading model: ${percentage}%`);
+            progressCallback(percentage);
+          }
         }
       });
       console.log("Answerer created successfully");

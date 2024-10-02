@@ -21,6 +21,7 @@ export default function ChatSection() {
   const [isModelReady, setIsModelReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
 
@@ -34,9 +35,12 @@ export default function ChatSection() {
     console.log("Start Chat button clicked");
     setIsLoading(true);
     setError(null);
+    setProgress(0);
     try {
       console.log("Initializing model...");
-      const result = await initializeModel();
+      const result = await initializeModel((percentage) => {
+        setProgress(percentage);
+      });
       console.log("Model initialization result:", result);
       setIsModelReady(result);
       if (!result) {
@@ -74,6 +78,17 @@ export default function ChatSection() {
             {isLoading ? 'Initializing...' : 'Start Chat'}
           </Button>
           {error && <p className="text-red-500 mt-2">{error}</p>}
+          {isLoading && (
+            <div className="w-full max-w-xs mt-4">
+              <div className="bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                <div 
+                  className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+              <p className="text-center mt-2">{progress}% Complete</p>
+            </div>
+          )}
         </div>
       )}
       {isModelReady && (

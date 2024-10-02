@@ -6,27 +6,89 @@ import workExperience from '../data/workExperience.json';
 import projects from '../data/projects.json';
 import hobbies from '../data/hobbies.json';
 
-export default function getResponse(message) {
-  const lowerMessage = message.toLowerCase().trim();
-  let response = '';
+let pipeline;
+let answerer = null;
 
-  if (isInappropriate(lowerMessage)) {
-    response = "I'm sorry, but I can't assist with that request.";
-  } else if (containsKeywords(lowerMessage, ['education', 'study', 'university', 'college', 'degree'])) {
-    response = formatEducationResponse();
-  } else if (containsKeywords(lowerMessage, ['work', 'experience', 'job', 'career', 'profession'])) {
-    response = formatWorkExperienceResponse();
-  } else if (containsKeywords(lowerMessage, ['project', 'portfolio', 'work', 'developed'])) {
-    response = formatProjectsResponse();
-  } else if (containsKeywords(lowerMessage, ['hobby', 'volleyball', 'interest', 'activities', 'sports'])) {
-    response = formatHobbiesResponse();
-  } else if (containsKeywords(lowerMessage, ['about', 'yourself', 'bio', 'who are you'])) {
-    response = formatBioResponse();
-  } else {
-    response = "I'm sorry, I didn't understand your question. Could you please rephrase?";
+export async function initializeModel() {
+  console.log("Initializing model...");
+  if (typeof window === 'undefined') {
+    console.log("Server-side environment detected, skipping initialization");
+    return false; // We're on the server side, don't initialize
   }
 
-  return response;
+  try {
+    if (!pipeline) {
+      console.log("Importing pipeline...");
+      const { pipeline: pipelineModule } = await import('@xenova/transformers');
+      pipeline = pipelineModule;
+      console.log("Pipeline imported successfully");
+    }
+
+    if (!answerer) {
+      console.log("Creating answerer...");
+      answerer = await pipeline('question-answering', 'Xenova/distilbert-base-uncased-distilled-squad');
+      console.log("Answerer created successfully");
+    }
+    console.log("Model initialization complete");
+    return true;
+  } catch (error) {
+    console.error("Error during model initialization:", error);
+    return false;
+  }
+}
+
+export async function getResponse(message) {
+  console.log("Getting response for message:", message);
+  if (typeof window === 'undefined') {
+    console.log("Server-side environment detected, returning default message");
+    return "I'm sorry, I can't process your request right now.";
+  }
+
+  if (!answerer) {
+    console.error("Model not initialized. Call initializeModel() first.");
+    throw new Error('Model not initialized. Call initializeModel() first.');
+  }
+
+  const lowerMessage = message.toLowerCase().trim();
+  let context = '';
+
+  if (isInappropriate(lowerMessage)) {
+    console.log("Inappropriate message detected");
+    return "I'm sorry, but I can't assist with that request.";
+  }
+
+  console.log("Generating context...");
+  if (containsKeywords(lowerMessage, ['education', 'study', 'university', 'college', 'degree'])) {
+    context += JSON.stringify(education);
+  }
+  if (containsKeywords(lowerMessage, ['work', 'experience', 'job', 'career', 'profession'])) {
+    context += JSON.stringify(workExperience);
+  }
+  if (containsKeywords(lowerMessage, ['project', 'portfolio', 'work', 'developed'])) {
+    context += JSON.stringify(projects);
+  }
+  if (containsKeywords(lowerMessage, ['hobby', 'volleyball', 'interest', 'activities', 'sports'])) {
+    context += JSON.stringify(hobbies);
+  }
+  if (containsKeywords(lowerMessage, ['about', 'yourself', 'bio', 'who are you'])) {
+    context += JSON.stringify(bio);
+  }
+
+  // If no specific context was added, use all data
+  if (!context) {
+    console.log("No specific context found, using all data");
+    context = JSON.stringify({ bio, education, workExperience, projects, hobbies });
+  }
+
+  try {
+    console.log("Sending question to model...");
+    const output = await answerer(message, context);
+    console.log("Received answer from model:", output.answer);
+    return output.answer;
+  } catch (error) {
+    console.error('Error in LLM processing:', error);
+    return "I'm sorry, I encountered an error while processing your request. Could you please try again?";
+  }
 }
 
 function containsKeywords(message, keywords) {
@@ -36,58 +98,4 @@ function containsKeywords(message, keywords) {
 function isInappropriate(message) {
   const inappropriateKeywords = ['badword1', 'badword2']; // Add any inappropriate words or phrases
   return inappropriateKeywords.some(keyword => message.includes(keyword));
-}
-
-function formatEducationResponse() {
-  let response = 'Here is my educational background:\n\n';
-  education.education.forEach(edu => {
-    response += `**${edu.degree}**\n`;
-    response += `*Institution*: ${edu.institution}\n`;
-    response += `*Duration*: ${edu.duration}\n`;
-    if (edu.gpa) response += `*GPA*: ${edu.gpa}\n`;
-    if (edu.keySkills) response += `*Key Skills*: ${edu.keySkills.join(', ')}\n`;
-    if (edu.honors) response += `*Honors*: ${edu.honors.join(', ')}\n`;
-    if (edu.scholarships) response += `*Scholarships*: ${edu.scholarships.join(', ')}\n`;
-    if (edu.activities) response += `*Activities*: ${edu.activities.join(', ')}\n`;
-    response += '\n';
-  });
-  return response;
-}
-
-function formatWorkExperienceResponse() {
-  let response = 'Here is my professional experience:\n\n';
-  workExperience.experiences.forEach(exp => {
-    response += `**${exp.title} at ${exp.company}**\n`;
-    response += `*Duration*: ${exp.duration}\n`;
-    if (exp.transition) {
-      response += `*Transition*: From ${exp.transition.from} to ${exp.transition.to} (${exp.transition.date})\n`;
-    }
-    response += `*Responsibilities*:\n`;
-    exp.responsibilities.forEach(responsibility => {
-      response += `- ${responsibility}\n`;
-    });
-    response += '\n';
-  });
-  return response;
-}
-
-function formatProjectsResponse() {
-  let response = 'Here are some of my projects:\n\n';
-  projects.projects.forEach(project => {
-    response += `**${project.name}**\n`;
-    response += `${project.description}\n\n`;
-  });
-  return response;
-}
-
-function formatHobbiesResponse() {
-  let response = 'Here are some of my hobbies and interests:\n\n';
-  hobbies.hobbies.forEach(hobby => {
-    response += `- **${hobby.title}**: ${hobby.description}\n`;
-  });
-  return response;
-}
-
-function formatBioResponse() {
-  return `${bio.aboutMe}\n\nYou can find more on my LinkedIn: ${bio.linkedin}`;
 }

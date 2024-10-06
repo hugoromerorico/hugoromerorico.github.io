@@ -7,7 +7,7 @@ import projects from '../data/projects.json';
 import hobbies from '../data/hobbies.json';
 
 let pipeline;
-let answerer = null;
+let generator = null;
 
 export async function initializeModel(progressCallback) {
   console.log("Initializing model...");
@@ -24,9 +24,9 @@ export async function initializeModel(progressCallback) {
       console.log("Pipeline imported successfully");
     }
 
-    if (!answerer) {
-      console.log("Creating answerer...");
-      answerer = await pipeline('question-answering', 'Xenova/distilbert-base-uncased-distilled-squad', {
+    if (!generator) {
+      console.log("Creating generator...");
+      generator = await pipeline('text-generation', 'Xenova/distilgpt2', {
         progress_callback: (progress) => {
           if (progress.status === 'progress') {
             const percentage = Math.round((progress.loaded / progress.total) * 100);
@@ -35,7 +35,7 @@ export async function initializeModel(progressCallback) {
           }
         }
       });
-      console.log("Answerer created successfully");
+      console.log("Generator created successfully");
     }
     console.log("Model initialization complete");
     return true;
@@ -52,7 +52,7 @@ export async function getResponse(message) {
     return "I'm sorry, I can't process your request right now.";
   }
 
-  if (!answerer) {
+  if (!generator) {
     console.error("Model not initialized. Call initializeModel() first.");
     throw new Error('Model not initialized. Call initializeModel() first.');
   }
@@ -89,10 +89,16 @@ export async function getResponse(message) {
   }
 
   try {
-    console.log("Sending question to model...");
-    const output = await answerer(message, context);
-    console.log("Received answer from model:", output.answer);
-    return output.answer;
+    console.log("Sending prompt to model...");
+    const prompt = `Context: ${context}\n\nQuestion: ${message}\n\nAnswer:`;
+    const output = await generator(prompt, {
+      max_new_tokens: 100,
+      temperature: 0.7,
+      repetition_penalty: 1.2,
+      no_repeat_ngram_size: 2,
+    });
+    console.log("Received answer from model:", output[0].generated_text);
+    return output[0].generated_text.split("Answer:")[1].trim();
   } catch (error) {
     console.error('Error in LLM processing:', error);
     return "I'm sorry, I encountered an error while processing your request. Could you please try again?";

@@ -1,2 +1,6 @@
-Fine tuning de un modelo de llama con mis datos. Servir en formato serverless con escalado a 0 en un proyecto de gcp.
-Creo que esto me sale mejor que tener mi server encendido 24/7.
+# Portfolio Features TODO List
+
+## Features to Implement
+- [ ] Fine tuning de un modelo de llama con mis datos.
+- [ ] Servir en formato serverless con escalado a 0 en un proyecto de GCP.
+- [ ] Creo que esto me sale mejor que tener mi server encendido 24/7.

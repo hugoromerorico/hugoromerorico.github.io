@@ -5,8 +5,36 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ChevronLeft, ChevronRight, ArrowLeft, Info } from 'lucide-react'
+import DoublePendulumSimulation from './DoublePendulumSimulation'
 
 const projectsData = [
+  {
+    title: "Double Pendulum Simulation",
+    description: "An interactive simulation of a double pendulum system, demonstrating chaos theory and complex motion.",
+    image: "/images/double-pendulum.png",
+    embedSrc: null,
+    info: (
+      <>
+        <p>
+          A double pendulum is a pendulum with another pendulum attached to its end. It's a simple physical system that exhibits rich dynamic behavior with a strong sensitivity to initial conditions.
+        </p>
+        <p className="mt-4">
+          The motion of a double pendulum is governed by a set of coupled ordinary differential equations and is chaotic.
+        </p>
+        <p className="mt-4">
+          This simulation uses the following parameters:
+          <ul className="list-disc list-inside mt-2">
+            <li>Length of each pendulum: 1 unit</li>
+            <li>Mass of each pendulum: 1 unit</li>
+            <li>Gravity: 9.81 m/s²</li>
+          </ul>
+        </p>
+        <p className="mt-4">
+          You can interact with the simulation by clicking on the pendulum masses and dragging to apply force. The pendulum will react to your input, demonstrating the chaotic nature of the system.
+        </p>
+      </>
+    )
+  },
   {
     title: "Mandelbrot Set Visualizer",
     description: "An interactive tool for exploring the Mandelbrot set, demonstrating complex mathematical concepts through visualization.",
@@ -122,11 +150,15 @@ export default function ProjectsSection() {
               </div>
               <h3 className="text-2xl font-bold mb-4">{currentProject.title}</h3>
               <div className="w-full h-[calc(100vh-16rem)] overflow-hidden">
-                <iframe
-                  src={currentProject.embedSrc}
-                  title={currentProject.title}
-                  className="w-full h-full border-0"
-                />
+                {currentProject.title === "Double Pendulum Simulation" ? (
+                  <DoublePendulumSimulation />
+                ) : (
+                  <iframe
+                    src={currentProject.embedSrc}
+                    title={currentProject.title}
+                    className="w-full h-full border-0"
+                  />
+                )}
               </div>
             </CardContent>
           </Card>

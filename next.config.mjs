@@ -6,6 +6,13 @@ const nextConfig = {
       unoptimized: true, // Needed for static exports
     },
     webpack: (config, { isServer }) => {
+      // Add WASM support
+      config.experiments = {
+        ...config.experiments,
+        asyncWebAssembly: true,
+        layers: true,
+      };
+
       if (!isServer) {
         config.resolve.fallback = {
           ...config.resolve.fallback,
@@ -14,13 +21,13 @@ const nextConfig = {
           crypto: false,
         };
       }
-      
-      // Add a rule to handle .node files
+
+      // Handle .node files
       config.module.rules.push({
         test: /\.node$/,
-        use: 'node-loader',
+        loader: 'node-loader',
       });
-  
+
       return config;
     },
   };

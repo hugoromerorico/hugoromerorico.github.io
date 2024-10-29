@@ -16,7 +16,7 @@ const projectsData = [
     info: (
       <>
         <p>
-          A double pendulum is a pendulum with another pendulum attached to its end. It's a simple physical system that exhibits rich dynamic behavior with a strong sensitivity to initial conditions.
+          A double pendulum is a pendulum with another pendulum attached to its end. It&apos;s a simple physical system that exhibits rich dynamic behavior with a strong sensitivity to initial conditions.
         </p>
         <p className="mt-4">
           The motion of a double pendulum is governed by a set of coupled ordinary differential equations and is chaotic.

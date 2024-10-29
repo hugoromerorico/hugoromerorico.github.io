@@ -7,12 +7,20 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { ChevronLeft, ChevronRight, ArrowLeft, Info } from 'lucide-react'
 import DoublePendulumSimulation from './DoublePendulumSimulation'
 
-const projectsData = [
+interface Project {
+  title: string;
+  description: string;
+  image: string;
+  embedSrc?: string;
+  info?: React.ReactNode;
+}
+
+const projectsData: Project[] = [
   {
     title: "Double Pendulum Simulation",
     description: "An interactive simulation of a double pendulum system, demonstrating chaos theory and complex motion.",
     image: "/images/double-pendulum.png",
-    embedSrc: null,
+    embedSrc: undefined,
     info: (
       <>
         <p>

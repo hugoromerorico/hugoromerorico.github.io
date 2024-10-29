@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent } from "@/components/ui/card"
 import { Brain, Medal } from 'lucide-react'
+import Image from 'next/image'
 
 const AboutSection = () => {
   const [activeSection, setActiveSection] = useState<'ai' | 'volleyball'>('ai')
@@ -23,11 +24,16 @@ const AboutSection = () => {
             onClick={() => toggleSection('ai')}
           >
             <CardContent className="relative h-full p-0">
-              <img
-                src="/images/hugo-photo.png"
-                alt="Hugo Romero - AI Engineer"
-                className="h-full object-cover"
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src="/images/hugo-photo.png"
+                  alt="Hugo Romero - AI Engineer"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
               <div className="absolute bottom-0 left-0 p-6 text-white">
                 <h3 className="text-2xl font-bold mb-2 flex items-center">
@@ -57,11 +63,16 @@ const AboutSection = () => {
             onClick={() => toggleSection('volleyball')}
           >
             <CardContent className="relative h-full p-0">
-              <img
-                src="/images/hugo-volley.jpeg"
-                alt="Hugo Romero - Volleyball Player"
-                className="w-full h-full object-cover"
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src="/images/hugo-volley.jpeg"
+                  alt="Hugo Romero - Volleyball Player"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
               <div className="absolute bottom-0 left-0 p-6 text-white">
                 <h3 className="text-2xl font-bold mb-2 flex items-center">

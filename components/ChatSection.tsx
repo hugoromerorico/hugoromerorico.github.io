@@ -38,7 +38,7 @@ export default function ChatSection() {
     setProgress(0);
     try {
       console.log("Initializing model...");
-      const result = await initializeModel((percentage) => {
+      const result = await initializeModel((percentage: number) => {
         setProgress(percentage);
       });
       console.log("Model initialization result:", result);

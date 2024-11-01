@@ -56,17 +56,32 @@ export default function ChatSection() {
 
   const handleSend = async () => {
     if (input.trim() && isModelReady) {
-      setMessages(prev => [...prev, { role: 'user', content: input }]);
+      const currentInput = input;
+      setInput('');
+      
+      setMessages(prev => [...prev, 
+        { role: 'user', content: currentInput },
+        { role: 'assistant', content: 'Thinking...' }
+      ]);
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
       try {
-        console.log("Sending message to model:", input);
-        const botResponse = await getResponse(input);
-        console.log("Received response from model:", botResponse);
-        setMessages(prev => [...prev, { role: 'assistant', content: botResponse }]);
+        let responseContent = '';
+        await getResponse(currentInput, (token) => {
+          responseContent += token;
+          setMessages(prev => [
+            ...prev.slice(0, -1),
+            { role: 'assistant', content: responseContent }
+          ]);
+        });
       } catch (error) {
         console.error('Error getting response:', error);
-        setMessages(prev => [...prev, { role: 'assistant', content: "I'm sorry, I encountered an error. Please try again." }]);
+        setMessages(prev => [
+          ...prev.slice(0, -1),
+          { role: 'assistant', content: "I'm sorry, I encountered an error. Please try again." }
+        ]);
       }
-      setInput('');
     }
   };
 
@@ -105,6 +120,7 @@ export default function ChatSection() {
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
+                      
                       p: (props) => <p className="mb-2" {...props} />,
                       ul: (props) => <ul className="list-disc list-inside mb-2" {...props} />,
                       ol: (props) => <ol className="list-decimal list-inside mb-2" {...props} />,

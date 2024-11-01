@@ -1,5 +1,6 @@
 // /utils/getResponse.js
 
+
 import bio from '../data/bio.json';
 import education from '../data/education.json';
 import workExperience from '../data/workExperience.json';
@@ -45,7 +46,7 @@ export async function initializeModel(progressCallback) {
   }
 }
 
-export async function getResponse(message) {
+export async function getResponse(message, onTokenCallback) {
   console.log("Getting response for message:", message);
   if (typeof window === 'undefined') {
     console.log("Server-side environment detected, returning default message");
@@ -67,7 +68,7 @@ export async function getResponse(message) {
 
   console.log("Generating context...");
   if (containsKeywords(lowerMessage, ['education', 'study', 'university', 'college', 'degree'])) {
-    context += JSON.stringify(education);
+    context += "I studied at the University Carlos III of Madrid, where I got my degree in Computer Science.";
   }
   if (containsKeywords(lowerMessage, ['work', 'experience', 'job', 'career', 'profession'])) {
     context += JSON.stringify(workExperience);
@@ -89,16 +90,34 @@ export async function getResponse(message) {
   }
 
   try {
-    console.log("Sending prompt to model...");
+    
     const prompt = `Context: ${context}\n\nQuestion: ${message}\n\nAnswer:`;
+    console.log("Sending prompt to model:", prompt);
     const output = await generator(prompt, {
       max_new_tokens: 100,
       temperature: 0.7,
       repetition_penalty: 1.2,
       no_repeat_ngram_size: 2,
     });
-    console.log("Received answer from model:", output[0].generated_text);
-    return output[0].generated_text.split("Answer:")[1].trim();
+
+    // Extract the response and clean it up
+    const response = output[0].generated_text.split("Answer:")[1].trim();
+    
+    // Split into words, but keep spaces
+    const words = response.split(/(\s+)/).filter(token => token.length > 0);
+    
+    let fullResponse = '';
+    for (const word of words) {
+      // Check if the word is not already part of the last addition
+      if (!fullResponse.endsWith(word)) {
+        fullResponse += word;
+        onTokenCallback(word);
+        // Add a small delay to simulate streaming
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+    }
+
+    return fullResponse;
   } catch (error) {
     console.error('Error in LLM processing:', error);
     return "I'm sorry, I encountered an error while processing your request. Could you please try again?";

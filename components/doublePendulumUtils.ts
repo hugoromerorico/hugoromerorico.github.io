@@ -132,7 +132,7 @@ export function updatePendulum(state: PendulumState): PendulumState {
 }
 
 function applyDragForce(state: PendulumState): void {
-  const { L1, L2, dragForceMultiplier, maxDragForce } = PHYSICS
+  const { L1, dragForceMultiplier, maxDragForce } = PHYSICS
   const centerX = 400
   const centerY = 200
   
@@ -145,15 +145,12 @@ function applyDragForce(state: PendulumState): void {
     const force = clamp(angleDiff * dragForceMultiplier, -maxDragForce, maxDragForce)
     state.omega1 += force
   } else if (state.selectedMass === 2) {
-    const x2 = x1 + L2 * Math.sin(state.theta2)
-    const y2 = y1 + L2 * Math.cos(state.theta2)
     const targetAngle = Math.atan2(state.mouseX - (centerX + x1), state.mouseY - (centerY + y1))
     const angleDiff = normalizeAngle(targetAngle - state.theta2)
     const force = clamp(angleDiff * dragForceMultiplier, -maxDragForce, maxDragForce)
     state.omega2 += force
   }
 }
-
 function updateTrail(state: PendulumState): void {
   const { L1, L2 } = PHYSICS
   const x1 = L1 * Math.sin(state.theta1)
@@ -180,7 +177,7 @@ export function drawPendulum(
   const centerY = height / 2 - 100
 
   // Draw in specific order for proper layering
-  drawTrail(ctx, state.trail, centerX, centerY, color)
+  drawTrail(ctx, state.trail, centerX, centerY)
   drawRods(ctx, state, centerX, centerY, color)
   drawMasses(ctx, state, centerX, centerY, color, theme)
   drawAnchor(ctx, centerX, centerY, color, theme) // New anchor drawing function
@@ -191,7 +188,6 @@ function drawTrail(
   trail: Array<{ x: number; y: number }>,
   centerX: number,
   centerY: number,
-  _color: string
 ): void {
   if (trail.length < 2) return;
 
@@ -411,3 +407,4 @@ function normalizeAngle(angle: number): number {
 
 // Export types for use in other files
 export type { PendulumState }
+

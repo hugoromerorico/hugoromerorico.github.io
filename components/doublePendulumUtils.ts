@@ -108,15 +108,12 @@ function rungeKutta4(state: PendulumState): void {
   state.theta1 += (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]) * timeStep / 6
   state.theta2 += (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1]) * timeStep / 6
   
-  // Apply velocity updates with clamping
-  let newOmega1 = (state.omega1 + (k1[2] + 2 * k2[2] + 2 * k3[2] + k4[2]) * timeStep / 6) * damping
-  let newOmega2 = (state.omega2 + (k1[3] + 2 * k2[3] + 2 * k3[3] + k4[3]) * timeStep / 6) * damping
+  const newOmega1 = (state.omega1 + (k1[2] + 2 * k2[2] + 2 * k3[2] + k4[2]) * timeStep / 6) * damping
+  const newOmega2 = (state.omega2 + (k1[3] + 2 * k2[3] + 2 * k3[3] + k4[3]) * timeStep / 6) * damping
   
-  // Clamp angular velocities
   state.omega1 = clamp(newOmega1, -maxAngularVelocity, maxAngularVelocity)
   state.omega2 = clamp(newOmega2, -maxAngularVelocity, maxAngularVelocity)
   
-  // Normalize angles to keep them within bounds
   state.theta1 = normalizeAngle(state.theta1)
   state.theta2 = normalizeAngle(state.theta2)
 }
@@ -286,7 +283,7 @@ function drawMasses(
   theme: string
 ): void {
   const { L1, L2 } = PHYSICS
-  const { massRadius, innerMassRadius, glowColor, glowSize, massGradient } = VISUAL
+  const { massRadius, innerMassRadius, glowSize } = VISUAL
   
   const x1 = L1 * Math.sin(state.theta1)
   const y1 = L1 * Math.cos(state.theta1)

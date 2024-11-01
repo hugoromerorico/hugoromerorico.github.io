@@ -68,7 +68,7 @@ export default function ChatSection() {
       
       try {
         let responseContent = '';
-        await getResponse(currentInput, (token) => {
+        await getResponse(currentInput, (token: string) => {
           responseContent += token;
           setMessages(prev => [
             ...prev.slice(0, -1),

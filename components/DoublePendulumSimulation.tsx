@@ -148,7 +148,7 @@ export default function DoublePendulumSimulation() {
       canvas.width, 
       canvas.height, 
       theme === 'dark' ? 'white' : 'black',
-      theme
+      theme ?? 'light'
     )
     
     animationFrameRef.current = requestAnimationFrame(animate)

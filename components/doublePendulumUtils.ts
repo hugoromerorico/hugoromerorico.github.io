@@ -5,11 +5,11 @@ const PHYSICS = {
   L2: 150,
   m1: 1,
   m2: 1,
-  damping: 0.9998,
+  damping: 0.9999,
   dragForceMultiplier: 0.5,
   timeStep: 0.016 * 1.5,
-  maxAngularVelocity: 5, // Maximum angular velocity (radians per second)
-  maxDragForce: 5 // Maximum force that can be applied through dragging
+  maxAngularVelocity: 4, // Maximum angular velocity (radians per second)
+  maxDragForce: 4 // Maximum force that can be applied through dragging
 }
 
 const VISUAL = {

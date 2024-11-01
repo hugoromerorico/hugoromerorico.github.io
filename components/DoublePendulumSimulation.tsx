@@ -105,7 +105,6 @@ export default function DoublePendulumSimulation() {
     if (mouseStartPosRef.current && stateRef.current.selectedMass) {
       const rect = canvas.getBoundingClientRect()
       const x = (e.clientX - rect.left) * (canvas.width / rect.width)
-      const y = (e.clientY - rect.top) * (canvas.height / rect.height)
       
       const dx = (x - mouseStartPosRef.current.x) * 0.05
       

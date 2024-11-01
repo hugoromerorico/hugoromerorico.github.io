@@ -191,7 +191,7 @@ function drawTrail(
   trail: Array<{ x: number; y: number }>,
   centerX: number,
   centerY: number,
-  color: string
+  _color: string
 ): void {
   if (trail.length < 2) return;
 

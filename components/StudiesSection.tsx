@@ -159,7 +159,6 @@ const categoryColors = {
 const CertificationCard = ({ certification }: { certification: { name: string; institution: string; date: string; category: string } }) => {
   const { theme } = useTheme()
 
-
   return (
     <Card className={`mb-2 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
       <CardContent className="p-4 flex items-center justify-between">
@@ -183,9 +182,9 @@ export default function StudiesSection() {
 
   const categories: Category[] = ['All', 'AI', 'Cloud', 'Soft Skills']
 
-  const filteredCertifications = certifications.filter(cert => 
-    selectedCategory === 'All' ? true : cert.category === selectedCategory
-  )
+  const filteredCertifications = certifications
+    .filter(cert => selectedCategory === 'All' ? true : cert.category === selectedCategory)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
   return (
     <ScrollArea className="h-[calc(100vh-4rem)] px-4 py-6">

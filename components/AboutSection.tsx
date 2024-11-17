@@ -197,12 +197,12 @@ const AboutSection = () => {
   ]
 
   const handleWheel = (e: React.WheelEvent) => {
-    const aspects = Object.keys(aspects) as AspectType[];
-    const currentIndex = aspects.indexOf(activeAspect);
+    const aspectKeys = Object.keys(aspects) as AspectType[];
+    const currentIndex = aspectKeys.indexOf(activeAspect);
     const newIndex = e.deltaY > 0 
-      ? (currentIndex + 1) % aspects.length
-      : (currentIndex - 1 + aspects.length) % aspects.length;
-    setActiveAspect(aspects[newIndex]);
+      ? (currentIndex + 1) % aspectKeys.length
+      : (currentIndex - 1 + aspectKeys.length) % aspectKeys.length;
+    setActiveAspect(aspectKeys[newIndex]);
   }
 
   return (
@@ -234,9 +234,9 @@ const AboutSection = () => {
             transition={{ duration: 0.3 }}
           >
             <Card className={`w-full h-full overflow-hidden ${aspects[activeAspect].bgColor || ''}`}>
-              <CardContent className="relative h-full p-0">
+              <CardContent className="relative h-full p-0 flex items-end justify-end">
                 {aspects[activeAspect].image && (
-                  <div className="absolute inset-0">
+                  <div className="absolute inset-0 flex items-end justify-end">
                     <Image
                       src={aspects[activeAspect].image}
                       alt={aspects[activeAspect].title}

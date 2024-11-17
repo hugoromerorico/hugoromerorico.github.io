@@ -24,11 +24,11 @@ const educationData = [
       "Computer Networks", "Advanced Computational Theory", "Operating Systems Design", "Machine Learning"
     ],
     scholarships: [
-      "Excellence Scholarship from Comunidad de Madrid (2019–2020)",
-      "Excellence Scholarship from Comunidad de Madrid (2020–2021)",
-      "Excellence Scholarship from Comunidad de Madrid (2021–2022)",
+      "Excellence Scholarship from Comunidad de Madrid (2019/2020)",
+      "Excellence Scholarship from Comunidad de Madrid (2020/2021)",
+      "Excellence Scholarship from Comunidad de Madrid (2021/2022)",
     ],
-    activities: ["Class Representative (2019/2020)"],
+    activities: ["Course Representative (2019/2020)"],
     achievements: [
       "Madrid University Beach Volleyball Champion (2021/2022)",
       "Madrid University Volleyball Champion (2022/2023)"
@@ -43,6 +43,7 @@ const educationData = [
 ]
 
 const certifications = [
+  { name: "Machine Learning Operations (MLOps) with Vertex AI: Model Evaluation", institution: "Google Cloud Skills Boost", date: "November 2024", category: "AI" },
   { name: "Prompt Engineering & LangChain for Developers", institution: "The Valley", date: "November 2023", category: "AI" },
   { name: "Automated Testing for LLMOps", institution: "DeepLearning.AI", date: "September 2024", category: "AI" },
   { name: "Networking in Google Cloud: Fundamentals", institution: "Google Cloud Skills Boost", date: "September 2024", category: "Cloud" },
@@ -149,14 +150,15 @@ const EducationCard = ({ education }: { education: Education }) => {
     </Card>
   )
 }
+const categoryColors = {
+  AI: 'bg-blue-500',
+  Cloud: 'bg-green-500',
+  'Soft Skills': 'bg-yellow-500'
+}
 
 const CertificationCard = ({ certification }: { certification: { name: string; institution: string; date: string; category: string } }) => {
   const { theme } = useTheme()
-  const categoryColors = {
-    AI: 'bg-blue-500',
-    Cloud: 'bg-green-500',
-    'Soft Skills': 'bg-yellow-500'
-  }
+
 
   return (
     <Card className={`mb-2 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
@@ -173,8 +175,17 @@ const CertificationCard = ({ certification }: { certification: { name: string; i
   )
 }
 
+type Category = 'AI' | 'Cloud' | 'Soft Skills' | 'All'
+
 export default function StudiesSection() {
   const { theme } = useTheme()
+  const [selectedCategory, setSelectedCategory] = useState<Category>('All')
+
+  const categories: Category[] = ['All', 'AI', 'Cloud', 'Soft Skills']
+
+  const filteredCertifications = certifications.filter(cert => 
+    selectedCategory === 'All' ? true : cert.category === selectedCategory
+  )
 
   return (
     <ScrollArea className="h-[calc(100vh-4rem)] px-4 py-6">
@@ -200,11 +211,27 @@ export default function StudiesSection() {
             <CardTitle className="flex items-center">
               <FileBadge className="mr-2" />
               Certifications & Courses
-            </CardTitle>
-          </CardHeader>
+            </CardTitle>            
+            <div className="flex gap-2 mt-2">
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category)}
+                  className={`${
+                    category !== 'All' && categoryColors[category] ? 
+                    `hover:${categoryColors[category]} hover:text-white` : ''
+                  }`}
+                >
+                  {category}
+                </Button>
+              ))}
+            </div>
+                      </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {certifications.map((cert, index) => (
+              {filteredCertifications.map((cert, index) => (
                 <CertificationCard key={index} certification={cert} />
               ))}
             </div>

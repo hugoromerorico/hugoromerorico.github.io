@@ -13,7 +13,7 @@ interface Aspect {
   icon: React.ReactNode
   image?: string
   imageStyle?: React.CSSProperties
-  content: React.ReactNode
+  content: React.ReactNode | ((props: { githubStats?: GitHubStats, books?: Book[] }) => React.ReactNode)
   bgColor?: string
 }
 
@@ -24,7 +24,7 @@ interface GitHubStats {
 interface Book {
   title: string;
   author: string;
-  status: 'reading' | 'read';
+  status: 'reading' | 'read' | 'favorite';
   year?: number;
 }
 
@@ -32,7 +32,7 @@ const fetchGitHubStats = async (): Promise<GitHubStats> => {
   const response = await fetch('https://github-contributions-api.jogruber.de/v4/hugo-romero-mm');
   const data = await response.json();
   return {
-    totalContributions: data.total.count
+    totalContributions: data.total["2024"]
   };
 };
 
@@ -43,31 +43,36 @@ const aspects: Record<AspectType, Aspect> = {
     image: "/images/hugo-photo.png",
     imageStyle: {
       objectFit: 'contain',
-      maxHeight: '80%',
-      objectPosition: 'bottom right',
+      height: '70%',
+      width: 'auto',
+      position: 'absolute',
+      bottom: '0',
+      right: '0',
+      maxWidth: '50%',
     },
     content: (
       <>
-        <p className="mb-4">
+        <p className="mb-4 max-w-[50%]">
           Passionate about pushing the boundaries of artificial intelligence and machine learning.
           Specializing in LLMs, MLOps, and productivizing innovative AI solutions.
         </p>
-        <h4 className="text-lg font-semibold mb-2">Key Projects:</h4>
-        <ul className="list-disc list-inside mb-4">
-          <li>Developed an AI-powered chatbot for customer service</li>
-          <li>Implemented a computer vision system for quality control in manufacturing</li>
-          <li>Created a recommendation engine for a major e-commerce platform</li>
+        <h4 className="text-lg font-semibold mb-2">In My Spare Time:</h4>
+        <ul className="list-disc list-inside mb-4 max-w-[50%]">
+          <li>Exploring and experimenting with state-of-the-art LLM models</li>
+          <li>Developing framework solutions for LLM interactions</li>
+          <li>Fine-tuning and optimizing various AI models</li>
+          <li>Investigating emerging trends in AI research</li>
         </ul>
       </>
     ),
   },
   volleyball: {
-    title: "Volleyball & Beach Volleyball Player",
+    title: "Volleyball & Beach Player",
     icon: <Medal className="h-6 w-6" />,
-    image: "/images/hugo-volley.jpeg",
+    image: "/images/hugo-volley.png",
     imageStyle: {
       objectFit: 'cover',
-      maxWidth: '50%',
+      maxWidth: '100%',
       objectPosition: 'right',
       maskImage: 'linear-gradient(to left, black, transparent)',
     },
@@ -81,7 +86,9 @@ const aspects: Record<AspectType, Aspect> = {
         <ul className="list-disc list-inside mb-4">
           <li>Madrid University Volleyball Champion</li>
           <li>Madrid University Beach Volleyball Champion</li>
-          <li>Represented university in national tournaments</li>
+          <li>5th Place WEVZA European Beach Volleyball</li>
+          <li>Top 30 Spanish Beach Volleyball Ranking</li>
+          <li>4 seasons in Spanish Second Division of Volleyball</li>
         </ul>
       </>
     ),
@@ -89,14 +96,22 @@ const aspects: Record<AspectType, Aspect> = {
   github: {
     title: "GitHub Contributions",
     icon: <Github className="h-6 w-6" />,
-    image: "/images/code-background.jpg",
+    image: "/images/hugo-teaching.png",
+    imageStyle: {
+      objectFit: 'cover',
+      maxWidth: '100%',
+      objectPosition: 'right',
+      maskImage: 'linear-gradient(to left, black, transparent)',
+      filter: 'brightness(0.8)', // Darken the image
+    },
+
     content: ({ githubStats }: { githubStats?: GitHubStats }) => (
       <>
         <p className="mb-4">
-          Active contributor to open-source projects and passionate about collaborative coding.
+          Always creating or exploring something new. Frameworking ways of interacting with AI systems or discerning the latest trends in AI world.
           {githubStats && (
             <span className="block mt-2 text-green-400">
-              Total Contributions: {githubStats.totalContributions}
+              Year 2024 Contributions: {githubStats.totalContributions}
             </span>
           )}
         </p>
@@ -116,13 +131,25 @@ const aspects: Record<AspectType, Aspect> = {
   lectures: {
     title: "Lecture Recommendations",
     icon: <Lightbulb className="h-6 w-6" />,
-    image: "/images/lecture-background.jpg",
+    image: "/images/hugo-teaching.png",
+    imageStyle: {
+      objectFit: 'cover',
+      maxWidth: '100%',
+      objectPosition: 'right',
+      maskImage: 'linear-gradient(to left, black, transparent)',
+      filter: 'brightness(1)', // Darken the image
+    },
     content: (
       <>
         <p className="mb-4">
-          Sharing knowledge is a passion of mine. Here are some lectures I highly recommend for those interested in AI and technology.
+          Here are some lectures I highly recommend for those interested in AI and technology.
         </p>
         <ul className="space-y-2">
+          <li>
+            <a href="https://www.youtube.com/watch?v=9vM4p9NN0Ts" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+              Stanford CS229: Machine Learning - Building Large Language Models (LLMs)
+            </a>
+          </li>
           <li>
             <a href="https://www.youtube.com/watch?v=aircAruvnKk" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
               But what is a neural network? | Deep learning, chapter 1
@@ -138,6 +165,11 @@ const aspects: Record<AspectType, Aspect> = {
               What is backpropagation really doing? | Deep learning, chapter 3
             </a>
           </li>
+          <li>
+            <a href="https://github.com/SylphAI-Inc/LLM-engineer-handbook?utm_source=substack&utm_medium=email" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+              LLM Engineer Handbook | Insanely good github repo for LLM engineers
+            </a>
+          </li>
         </ul>
       </>
     ),
@@ -145,35 +177,54 @@ const aspects: Record<AspectType, Aspect> = {
   books: {
     title: "Book Tracker",
     icon: <BookOpen className="h-6 w-6" />,
-    bgColor: "bg-gradient-to-br from-purple-600 to-blue-600",
-    content: ({ books }: { books: Book[] }) => (
+    bgColor: "bg-gradient-to-br from-gray-900 to-slate-800",
+    content: ({ books = [] }: { books?: Book[] }) => (
       <div className="space-y-6">
         <div>
           <h4 className="text-lg font-semibold mb-2">Currently Reading</h4>
           <ul className="space-y-2">
             {books.filter(book => book.status === 'reading').map((book, index) => (
-              <li key={index} className="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+              <li key={index} className="bg-black/30 p-3 rounded-lg backdrop-blur-sm border border-gray-700">
                 <h5 className="font-medium">{book.title}</h5>
                 <p className="text-sm text-gray-300">{book.author}</p>
               </li>
             ))}
           </ul>
         </div>
-        <div>
-          <h4 className="text-lg font-semibold mb-2">Read Books</h4>
-          {[...new Set(books.filter(book => book.status === 'read').map(book => book.year))].sort((a, b) => b! - a!).map(year => (
-            <div key={year} className="mb-4">
-              <h5 className="text-md font-medium mb-2">{year}</h5>
-              <ul className="space-y-2">
-                {books.filter(book => book.status === 'read' && book.year === year).map((book, index) => (
-                  <li key={index} className="bg-white/10 p-2 rounded-lg backdrop-blur-sm">
-                    <h6 className="font-medium">{book.title}</h6>
-                    <p className="text-sm text-gray-300">{book.author}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <h4 className="text-lg font-semibold mb-2">Last Reads</h4>
+            {[...new Set(books.filter(book => book.status === 'read').map(book => book.year))]
+              .sort((a, b) => b! - a!)
+              .map(year => (
+                <div key={year} className="mb-4">
+                  <h5 className="text-md font-medium mb-2">{year}</h5>
+                  <ul className="space-y-2">
+                    {books
+                      .filter(book => book.status === 'read' && book.year === year)
+                      .map((book, index) => (
+                        <li key={index} className="bg-black/30 p-2 rounded-lg backdrop-blur-sm border border-gray-700/50 hover:border-gray-600 transition-colors">
+                          <h6 className="font-medium">{book.title}</h6>
+                          <p className="text-sm text-gray-300">{book.author}</p>
+                        </li>
+                    ))}
+                  </ul>
+                </div>
+            ))}
+          </div>
+          
+          <div>
+            <h4 className="text-lg font-semibold mb-2">Favorite Books</h4>
+            <ul className="space-y-2">
+              {books.filter(book => book.status === 'favorite').map((book, index) => (
+                <li key={index} className="bg-black/30 p-2 rounded-lg backdrop-blur-sm border border-amber-700/50 hover:border-amber-600 transition-colors">
+                  <h6 className="font-medium">{book.title}</h6>
+                  <p className="text-sm text-gray-300">{book.author}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     ),
@@ -190,10 +241,15 @@ const AboutSection = () => {
   }, []);
 
   const books: Book[] = [
-    { title: "Deep Learning", author: "Ian Goodfellow", status: "reading" },
-    { title: "The Master Algorithm", author: "Pedro Domingos", status: "read", year: 2023 },
-    { title: "Artificial Intelligence: A Modern Approach", author: "Stuart Russell", status: "read", year: 2023 },
-    { title: "Machine Learning: A Probabilistic Perspective", author: "Kevin Murphy", status: "read", year: 2022 },
+    { title: "1984", author: "George Orwell", status: "reading" },
+    { title: "Rebelión en la granja", author: "George Orwell", status: "read", year: 2024 },
+    { title: "La realidad no existe", author: "Jaime Rodríguez de Santiago", status: "read", year: 2024 },
+    { title: "El juego de Ender", author: "Orson Scott Card", status: "read", year: 2024 },
+    { title: "Sum: Forty tales from the afterlives", author: "David Eagleman", status: "read", year: 2024 },
+    { title: "Siddhartha", author: "Herman Hesse", status: "favorite" },
+    { title: "Verbolario", author: "Rodrigo Cortés", status: "favorite" },
+    { title: "Critón o el Deber del ciudadano", author: "Platón", status: "favorite" },
+    { title: "El principito", author: "Antoine de Saint-Exupéry", status: "favorite" },
   ]
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -237,14 +293,26 @@ const AboutSection = () => {
               <CardContent className="relative h-full p-0 flex items-end justify-end">
                 {aspects[activeAspect].image && (
                   <div className="absolute inset-0 flex items-end justify-end">
-                    <Image
-                      src={aspects[activeAspect].image}
-                      alt={aspects[activeAspect].title}
-                      fill
-                      style={aspects[activeAspect].imageStyle || { objectFit: 'cover' }}
-                      sizes="(max-width: 768px) 100vw, 75vw"
-                      priority
-                    />
+                    {activeAspect === 'ai' ? (
+                      <Image
+                        src={aspects[activeAspect].image}
+                        alt={aspects[activeAspect].title}
+                        width={500}
+                        height={700}
+                        style={aspects[activeAspect].imageStyle || { objectFit: 'cover' }}
+                        sizes="(max-width: 768px) 100vw, 75vw"
+                        priority
+                      />
+                    ) : (
+                      <Image
+                        src={aspects[activeAspect].image}
+                        alt={aspects[activeAspect].title}
+                        fill
+                        style={aspects[activeAspect].imageStyle || { objectFit: 'cover' }}
+                        sizes="(max-width: 768px) 100vw, 75vw"
+                        priority
+                      />
+                    )}
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />

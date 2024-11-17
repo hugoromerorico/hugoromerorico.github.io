@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent } from "@/components/ui/card"
-import { Brain, Medal, Book, Github, Lightbulb, BookOpen } from 'lucide-react'
+import { Brain, Medal, Github, Lightbulb, BookOpen } from 'lucide-react'
 import Image from 'next/image'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
@@ -11,12 +11,21 @@ type AspectType = 'ai' | 'volleyball' | 'github' | 'lectures' | 'books'
 interface Aspect {
   title: string
   icon: React.ReactNode
-  image: string
+  image?: string
+  imageStyle?: React.CSSProperties
   content: React.ReactNode
+  bgColor?: string
 }
 
 interface GitHubStats {
   totalContributions: number;
+}
+
+interface Book {
+  title: string;
+  author: string;
+  status: 'reading' | 'read';
+  year?: number;
 }
 
 const fetchGitHubStats = async (): Promise<GitHubStats> => {
@@ -32,6 +41,11 @@ const aspects: Record<AspectType, Aspect> = {
     title: "AI Enthusiast & Engineer",
     icon: <Brain className="h-6 w-6" />,
     image: "/images/hugo-photo.png",
+    imageStyle: {
+      objectFit: 'contain',
+      maxHeight: '80%',
+      objectPosition: 'bottom right',
+    },
     content: (
       <>
         <p className="mb-4">
@@ -51,6 +65,12 @@ const aspects: Record<AspectType, Aspect> = {
     title: "Volleyball & Beach Volleyball Player",
     icon: <Medal className="h-6 w-6" />,
     image: "/images/hugo-volley.jpeg",
+    imageStyle: {
+      objectFit: 'cover',
+      maxWidth: '50%',
+      objectPosition: 'right',
+      maskImage: 'linear-gradient(to left, black, transparent)',
+    },
     content: (
       <>
         <p className="mb-4">
@@ -125,39 +145,37 @@ const aspects: Record<AspectType, Aspect> = {
   books: {
     title: "Book Tracker",
     icon: <BookOpen className="h-6 w-6" />,
-    image: "/images/books-background.jpg",
-    content: (
-      <>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h4 className="text-lg font-semibold">Currently Reading</h4>
-            <a 
-              href="https://www.goodreads.com/user/show/your-profile" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-sm text-blue-400 hover:underline"
-            >
-              View on Goodreads
-            </a>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white/10 p-4 rounded-lg backdrop-blur-sm">
-              <div className="aspect-[2/3] relative mb-2">
-                <Image
-                  src="/placeholder.svg"
-                  alt="Book cover"
-                  fill
-                  className="rounded-md object-cover"
-                />
-              </div>
-              <h5 className="font-medium">Deep Learning</h5>
-              <p className="text-sm text-gray-300">by Ian Goodfellow</p>
-              <div className="mt-2 h-1 bg-green-500 rounded" style={{ width: '75%' }}></div>
-              <p className="text-xs mt-1 text-gray-400">75% complete</p>
-            </div>
-          </div>
+    bgColor: "bg-gradient-to-br from-purple-600 to-blue-600",
+    content: ({ books }: { books: Book[] }) => (
+      <div className="space-y-6">
+        <div>
+          <h4 className="text-lg font-semibold mb-2">Currently Reading</h4>
+          <ul className="space-y-2">
+            {books.filter(book => book.status === 'reading').map((book, index) => (
+              <li key={index} className="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                <h5 className="font-medium">{book.title}</h5>
+                <p className="text-sm text-gray-300">{book.author}</p>
+              </li>
+            ))}
+          </ul>
         </div>
-      </>
+        <div>
+          <h4 className="text-lg font-semibold mb-2">Read Books</h4>
+          {[...new Set(books.filter(book => book.status === 'read').map(book => book.year))].sort((a, b) => b! - a!).map(year => (
+            <div key={year} className="mb-4">
+              <h5 className="text-md font-medium mb-2">{year}</h5>
+              <ul className="space-y-2">
+                {books.filter(book => book.status === 'read' && book.year === year).map((book, index) => (
+                  <li key={index} className="bg-white/10 p-2 rounded-lg backdrop-blur-sm">
+                    <h6 className="font-medium">{book.title}</h6>
+                    <p className="text-sm text-gray-300">{book.author}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
     ),
   },
 }
@@ -165,45 +183,30 @@ const aspects: Record<AspectType, Aspect> = {
 const AboutSection = () => {
   const [activeAspect, setActiveAspect] = useState<AspectType>('ai')
   const [githubStats, setGithubStats] = useState<GitHubStats>()
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetchGitHubStats().then(setGithubStats);
   }, []);
 
-  const containerVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
-      opacity: 0
-    })
-  };
+  const books: Book[] = [
+    { title: "Deep Learning", author: "Ian Goodfellow", status: "reading" },
+    { title: "The Master Algorithm", author: "Pedro Domingos", status: "read", year: 2023 },
+    { title: "Artificial Intelligence: A Modern Approach", author: "Stuart Russell", status: "read", year: 2023 },
+    { title: "Machine Learning: A Probabilistic Perspective", author: "Kevin Murphy", status: "read", year: 2022 },
+  ]
 
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
-  };
-
-  const [[page, direction], setPage] = useState([0, 0]);
-
-  const paginate = (newDirection: number) => {
+  const handleWheel = (e: React.WheelEvent) => {
     const aspects = Object.keys(aspects) as AspectType[];
     const currentIndex = aspects.indexOf(activeAspect);
-    const newIndex = (currentIndex + newDirection + aspects.length) % aspects.length;
+    const newIndex = e.deltaY > 0 
+      ? (currentIndex + 1) % aspects.length
+      : (currentIndex - 1 + aspects.length) % aspects.length;
     setActiveAspect(aspects[newIndex]);
-    setPage([page + newDirection, newDirection]);
-  };
+  }
 
   return (
-    <div className="h-[calc(100vh-4rem)] flex items-center justify-center p-4">
+    <div className="h-[calc(100vh-4rem)] flex items-center justify-center p-4" ref={containerRef} onWheel={handleWheel}>
       <div className="w-full max-w-6xl h-[600px] flex flex-col md:flex-row rounded-xl overflow-hidden shadow-2xl bg-gray-900">
         <div className="w-full md:w-1/4 bg-gray-800 p-4">
           <h2 className="text-2xl font-bold text-white mb-4">Explore My World</h2>
@@ -221,45 +224,29 @@ const AboutSection = () => {
             ))}
           </div>
         </div>
-        <AnimatePresence initial={false} custom={direction} mode="wait">
+        <AnimatePresence mode="wait">
           <motion.div
             key={activeAspect}
             className="flex-grow relative"
-            custom={direction}
-            variants={containerVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.2 }
-            }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={1}
-            onDragEnd={(e, { offset, velocity }) => {
-              const swipe = swipePower(offset.x, velocity.x);
-
-              if (swipe < -swipeConfidenceThreshold) {
-                paginate(1);
-              } else if (swipe > swipeConfidenceThreshold) {
-                paginate(-1);
-              }
-            }}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.3 }}
           >
-            <Card className="w-full h-full overflow-hidden">
+            <Card className={`w-full h-full overflow-hidden ${aspects[activeAspect].bgColor || ''}`}>
               <CardContent className="relative h-full p-0">
-                <div className="relative w-full h-[70%] mx-auto">
-                  <Image
-                    src={aspects[activeAspect].image}
-                    alt={aspects[activeAspect].title}
-                    fill
-                    style={{ objectFit: 'contain' }}
-                    sizes="(max-width: 768px) 100vw, 75vw"
-                    priority
-                    className="mx-auto"
-                  />
-                </div>
+                {aspects[activeAspect].image && (
+                  <div className="absolute inset-0">
+                    <Image
+                      src={aspects[activeAspect].image}
+                      alt={aspects[activeAspect].title}
+                      fill
+                      style={aspects[activeAspect].imageStyle || { objectFit: 'cover' }}
+                      sizes="(max-width: 768px) 100vw, 75vw"
+                      priority
+                    />
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
                 <div className="absolute inset-0 p-6 text-white">
                   <h3 className="text-2xl font-bold mb-4 flex items-center">
@@ -268,7 +255,7 @@ const AboutSection = () => {
                   </h3>
                   <ScrollArea className="h-[calc(100%-4rem)]">
                     {typeof aspects[activeAspect].content === 'function'
-                      ? aspects[activeAspect].content({ githubStats })
+                      ? aspects[activeAspect].content({ githubStats, books })
                       : aspects[activeAspect].content}
                   </ScrollArea>
                 </div>

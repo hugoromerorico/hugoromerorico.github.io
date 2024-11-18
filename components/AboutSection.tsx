@@ -262,77 +262,81 @@ const AboutSection = () => {
   }
 
   return (
-    <div className="h-[calc(100vh-4rem)] flex items-center justify-center p-4" ref={containerRef} onWheel={handleWheel}>
-      <div className="w-full max-w-6xl h-[600px] flex flex-col md:flex-row rounded-xl overflow-hidden shadow-2xl bg-gray-900">
-        <div className="w-full md:w-1/4 bg-gray-800 p-4">
-          <h2 className="text-2xl font-bold text-white mb-4">Explore My World</h2>
-          <div className="space-y-2">
-            {(Object.keys(aspects) as AspectType[]).map((aspect) => (
-              <Button
-                key={aspect}
-                variant={activeAspect === aspect ? "default" : "outline"}
-                className="w-full justify-start"
-                onClick={() => setActiveAspect(aspect)}
+    <ScrollArea className="h-[calc(100vh-8rem)] md:h-[calc(100vh-4rem)] mobile-section-padding">
+      <div className="max-w-4xl mx-auto mobile-card-spacing">
+        <div className="h-[calc(100vh-4rem)] flex items-center justify-center p-4" ref={containerRef} onWheel={handleWheel}>
+          <div className="w-full max-w-6xl h-[600px] flex flex-col md:flex-row rounded-xl overflow-hidden shadow-2xl bg-gray-900">
+            <div className="w-full md:w-1/4 bg-gray-800 p-4">
+              <h2 className="text-2xl font-bold text-white mb-4">Explore My World</h2>
+              <div className="space-y-2">
+                {(Object.keys(aspects) as AspectType[]).map((aspect) => (
+                  <Button
+                    key={aspect}
+                    variant={activeAspect === aspect ? "default" : "outline"}
+                    className="w-full justify-start"
+                    onClick={() => setActiveAspect(aspect)}
+                  >
+                    {aspects[aspect].icon}
+                    <span className="ml-2">{aspects[aspect].title}</span>
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeAspect}
+                className="flex-grow relative"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -50 }}
+                transition={{ duration: 0.3 }}
               >
-                {aspects[aspect].icon}
-                <span className="ml-2">{aspects[aspect].title}</span>
-              </Button>
-            ))}
+                <Card className={`w-full h-full overflow-hidden ${aspects[activeAspect].bgColor || ''}`}>
+                  <CardContent className="relative h-full p-0 flex items-end justify-end">
+                    {aspects[activeAspect].image && (
+                      <div className="absolute inset-0 flex items-end justify-end">
+                        {activeAspect === 'ai' ? (
+                          <Image
+                            src={aspects[activeAspect].image}
+                            alt={aspects[activeAspect].title}
+                            width={500}
+                            height={700}
+                            style={aspects[activeAspect].imageStyle || { objectFit: 'cover' }}
+                            sizes="(max-width: 768px) 100vw, 75vw"
+                            priority
+                          />
+                        ) : (
+                          <Image
+                            src={aspects[activeAspect].image}
+                            alt={aspects[activeAspect].title}
+                            fill
+                            style={aspects[activeAspect].imageStyle || { objectFit: 'cover' }}
+                            sizes="(max-width: 768px) 100vw, 75vw"
+                            priority
+                          />
+                        )}
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                    <div className="absolute inset-0 p-6 text-white">
+                      <h3 className="text-2xl font-bold mb-4 flex items-center">
+                        {aspects[activeAspect].icon}
+                        <span className="ml-2">{aspects[activeAspect].title}</span>
+                      </h3>
+                      <ScrollArea className="h-[calc(100%-4rem)]">
+                        {typeof aspects[activeAspect].content === 'function'
+                          ? aspects[activeAspect].content({ githubStats, books })
+                          : aspects[activeAspect].content}
+                      </ScrollArea>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeAspect}
-            className="flex-grow relative"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Card className={`w-full h-full overflow-hidden ${aspects[activeAspect].bgColor || ''}`}>
-              <CardContent className="relative h-full p-0 flex items-end justify-end">
-                {aspects[activeAspect].image && (
-                  <div className="absolute inset-0 flex items-end justify-end">
-                    {activeAspect === 'ai' ? (
-                      <Image
-                        src={aspects[activeAspect].image}
-                        alt={aspects[activeAspect].title}
-                        width={500}
-                        height={700}
-                        style={aspects[activeAspect].imageStyle || { objectFit: 'cover' }}
-                        sizes="(max-width: 768px) 100vw, 75vw"
-                        priority
-                      />
-                    ) : (
-                      <Image
-                        src={aspects[activeAspect].image}
-                        alt={aspects[activeAspect].title}
-                        fill
-                        style={aspects[activeAspect].imageStyle || { objectFit: 'cover' }}
-                        sizes="(max-width: 768px) 100vw, 75vw"
-                        priority
-                      />
-                    )}
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-                <div className="absolute inset-0 p-6 text-white">
-                  <h3 className="text-2xl font-bold mb-4 flex items-center">
-                    {aspects[activeAspect].icon}
-                    <span className="ml-2">{aspects[activeAspect].title}</span>
-                  </h3>
-                  <ScrollArea className="h-[calc(100%-4rem)]">
-                    {typeof aspects[activeAspect].content === 'function'
-                      ? aspects[activeAspect].content({ githubStats, books })
-                      : aspects[activeAspect].content}
-                  </ScrollArea>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </AnimatePresence>
       </div>
-    </div>
+    </ScrollArea>
   )
 }
 

@@ -79,3 +79,124 @@
   background-image: radial-gradient(circle, #00000010 1px, transparent 1px);
   background-size: 24px 24px;
 }
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .mobile-section-padding {
+    @apply px-4 py-4 md:px-6 md:py-6;
+  }
+  
+  .mobile-card-spacing {
+    @apply space-y-3 md:space-y-4;
+  }
+  
+  .mobile-text-adjust {
+    @apply text-sm md:text-base;
+  }
+  
+  .mobile-heading {
+    @apply text-xl md:text-3xl font-bold mb-4 md:mb-6;
+  }
+
+  /* Mobile-specific card styles */
+  .mobile-card-header {
+    @apply p-3 md:p-6;
+  }
+
+  .mobile-card-title {
+    @apply text-base md:text-xl font-semibold line-clamp-2 md:line-clamp-none;
+  }
+
+  .mobile-card-description {
+    @apply text-xs md:text-sm mt-1;
+  }
+
+  .mobile-card-content {
+    @apply p-3 md:p-6 text-sm md:text-base;
+  }
+
+  .mobile-expand-button {
+    @apply -mr-2 md:mr-0;
+  }
+
+  .mobile-sections-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  .mobile-section-title {
+    @apply text-sm md:text-base font-medium block mb-1;
+  }
+
+  .mobile-list {
+    @apply list-disc list-inside text-sm md:text-base space-y-1;
+  }
+
+  .mobile-badge {
+    @apply text-xs md:text-sm px-2 py-0.5;
+  }
+
+  /* Certification card specific styles */
+  .mobile-cert-card {
+    @apply space-y-2 md:space-y-0;
+  }
+
+  .mobile-cert-info {
+    @apply flex-1 min-w-0;
+  }
+
+  /* Category filters */
+  .mobile-category-filters {
+    @apply flex flex-wrap gap-1 md:gap-2 mt-2;
+  }
+
+  .mobile-category-button {
+    @apply text-xs md:text-sm px-2 py-1;
+  }
+
+  /* Work section specific styles */
+  .mobile-work-header {
+    @apply p-3 md:p-6;
+  }
+
+  .mobile-work-title {
+    @apply text-sm md:text-xl font-semibold truncate;
+  }
+
+  .mobile-work-company {
+    @apply text-xs md:text-base;
+  }
+
+  .mobile-work-content {
+    @apply p-3 md:p-6 text-sm md:text-base;
+  }
+
+  .mobile-work-badge {
+    @apply text-xs md:text-sm px-2 py-0.5;
+  }
+
+  .mobile-list-item {
+    @apply text-sm md:text-base leading-relaxed;
+  }
+
+  .mobile-company-name {
+    @apply text-sm md:text-base font-medium;
+  }
+
+  .mobile-transition-container {
+    @apply text-center md:text-left space-y-1 md:space-y-0;
+  }
+}
+
+.card-mobile-padding {
+  @apply p-3 md:p-6;
+}

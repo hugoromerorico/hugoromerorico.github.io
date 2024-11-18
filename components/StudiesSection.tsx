@@ -73,14 +73,22 @@ const EducationCard = ({ education }: { education: Education }) => {
   const { theme } = useTheme()
 
   return (
-    <Card className={`mb-4 overflow-hidden border-l-4 ${theme === 'dark' ? 'border-primary bg-gray-800' : 'border-primary bg-white'}`}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+    <Card className={`mb-2 overflow-hidden border-l-4 ${theme === 'dark' ? 'border-primary bg-gray-800' : 'border-primary bg-white'}`}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 mobile-card-header">
         <div>
-          <CardTitle>{education.degree}</CardTitle>
-          <CardDescription>{education.institution} | {education.duration}</CardDescription>
+          <CardTitle className="mobile-card-title">{education.degree}</CardTitle>
+          <CardDescription className="mobile-card-description">
+            <div>{education.institution}</div>
+            <div>{education.duration}</div>
+          </CardDescription>
         </div>
-        <Button variant="ghost" size="sm" onClick={() => setIsExpanded(!isExpanded)}>
-          {isExpanded ? <ChevronUp /> : <ChevronDown />}
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="mobile-expand-button"
+        >
+          {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </Button>
       </CardHeader>
       <AnimatePresence>
@@ -91,58 +99,65 @@ const EducationCard = ({ education }: { education: Education }) => {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <CardContent>
-              {education.gpa && <p className="mb-2">GPA: {education.gpa}</p>}
-              {education.skills && (
-                <div className="mb-2">
-                  <strong>Key Skills:</strong>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {education.skills.map((skill, index) => (
-                      <Badge key={index} variant="secondary">{skill}</Badge>
-                    ))}
+            <CardContent className="mobile-card-content">
+              {education.gpa && <p className="mb-2 mobile-text-adjust">GPA: {education.gpa}</p>}
+              
+              <div className="mobile-sections-grid">
+                {education.skills && (
+                  <div className="mb-2">
+                    <strong className="mobile-section-title">Skills:</strong>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {education.skills.map((skill, index) => (
+                        <Badge key={index} variant="secondary" className="mobile-badge">{skill}</Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-              {education.honors && (
-                <div className="mb-2">
-                  <strong>Honors:</strong>
-                  <ul className="list-disc list-inside mt-1">
-                    {education.honors.map((honor, index) => (
-                      <li key={index}>{honor}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {education.scholarships && (
-                <div className="mb-2">
-                  <strong>Scholarships:</strong>
-                  <ul className="list-disc list-inside mt-1">
-                    {education.scholarships.map((scholarship, index) => (
-                      <li key={index}>{scholarship}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {education.activities && (
-                <div className="mb-2">
-                  <strong>Activities:</strong>
-                  <ul className="list-disc list-inside mt-1">
-                    {education.activities.map((activity, index) => (
-                      <li key={index}>{activity}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {education.achievements && (
-                <div className="mb-2">
-                  <strong>Achievements:</strong>
-                  <ul className="list-disc list-inside mt-1">
-                    {education.achievements.map((achievement, index) => (
-                      <li key={index}>{achievement}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                )}
+                
+                {education.honors && (
+                  <div className="mb-2">
+                    <strong className="mobile-section-title">Honors:</strong>
+                    <ul className="mobile-list">
+                      {education.honors.map((honor, index) => (
+                        <li key={index}>{honor}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {education.scholarships && (
+                  <div className="mb-2">
+                    <strong className="mobile-section-title">Scholarships:</strong>
+                    <ul className="mobile-list">
+                      {education.scholarships.map((scholarship, index) => (
+                        <li key={index}>{scholarship}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {education.activities && (
+                  <div className="mb-2">
+                    <strong className="mobile-section-title">Activities:</strong>
+                    <ul className="mobile-list">
+                      {education.activities.map((activity, index) => (
+                        <li key={index}>{activity}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {education.achievements && (
+                  <div className="mb-2">
+                    <strong className="mobile-section-title">Achievements:</strong>
+                    <ul className="mobile-list">
+                      {education.achievements.map((achievement, index) => (
+                        <li key={index}>{achievement}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </CardContent>
           </motion.div>
         )}
@@ -161,12 +176,12 @@ const CertificationCard = ({ certification }: { certification: { name: string; i
 
   return (
     <Card className={`mb-2 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
-      <CardContent className="p-4 flex items-center justify-between">
-        <div>
-          <h3 className="font-semibold">{certification.name}</h3>
+      <CardContent className="p-3 flex flex-col md:flex-row md:items-center justify-between mobile-cert-card">
+        <div className="mobile-cert-info">
+          <h3 className="font-semibold mobile-text-adjust">{certification.name}</h3>
           <p className="text-sm text-muted-foreground">{certification.institution} | {certification.date}</p>
         </div>
-        <Badge className={`${categoryColors[certification.category as keyof typeof categoryColors]} text-white`}>
+        <Badge className={`${categoryColors[certification.category as keyof typeof categoryColors]} text-white mt-2 md:mt-0 self-start md:self-center`}>
           {certification.category}
         </Badge>
       </CardContent>
@@ -187,16 +202,9 @@ export default function StudiesSection() {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
   return (
-    <ScrollArea className="h-[calc(100vh-4rem)] px-4 py-6">
-      <div className="max-w-4xl mx-auto">
-        <motion.h2
-          className={`text-3xl font-bold mb-6 flex items-center ${
-            theme === 'dark' ? 'text-white' : 'text-black'
-          }`}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+    <ScrollArea className="h-[calc(100vh-8rem)] md:h-[calc(100vh-4rem)] mobile-section-padding">
+      <div className="max-w-4xl mx-auto mobile-card-spacing">
+        <motion.h2 className="mobile-heading flex items-center">
           <GraduationCap className="mr-2" />
           Educational Background
         </motion.h2>

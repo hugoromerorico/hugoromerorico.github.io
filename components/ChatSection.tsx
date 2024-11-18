@@ -86,7 +86,7 @@ export default function ChatSection() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-[calc(100vh-8rem)] md:h-[calc(100vh-4rem)]">
       {!isModelReady && (
         <div className="flex flex-col justify-center items-center h-full">
           <Button onClick={handleStartChat} disabled={isLoading}>
@@ -151,7 +151,7 @@ export default function ChatSection() {
             ))}
             <div ref={messagesEndRef} />
           </div>
-          <footer className={`p-4 border-t ${theme === 'dark' ? 'bg-chatgpt-dark border-gray-600' : 'bg-white border-gray-200'}`}>
+          <footer className={`p-3 md:p-4 border-t ${theme === 'dark' ? 'bg-chatgpt-dark border-gray-600' : 'bg-white border-gray-200'}`}>
             <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="flex items-center">
               <Input
                 placeholder="Ask about Hugo's skills, experience, or projects..."

@@ -99,27 +99,25 @@ const CompanyTransition: React.FC<{ transitionInfo: TransitionInfo }> = ({ trans
 
   return (
     <motion.div
-      className={`flex items-center justify-center my-4 p-4 rounded-lg ${
+      className={`flex flex-col md:flex-row items-center justify-center my-4 p-3 md:p-4 rounded-lg ${
         theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-      }`}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      } mobile-transition-container`}
     >
-      <div className="flex items-center">
-        <div className="w-8 h-8 rounded-full overflow-hidden mr-2">
+      <div className="flex items-center mb-2 md:mb-0">
+        <div className="w-6 h-6 md:w-8 md:h-8 rounded-full overflow-hidden mr-2">
           <img src={transitionInfo.from.logo} alt={transitionInfo.from.name} className="w-full h-full object-cover" />
         </div>
-        <span className="font-semibold">{transitionInfo.from.name}</span>
+        <span className="mobile-company-name">{transitionInfo.from.name}</span>
       </div>
-      <ArrowRight className="mx-4 text-primary" />
+      <ArrowRight className="hidden md:block mx-4 text-primary" />
+      <ArrowRight className="block md:hidden rotate-90 my-2 text-primary" />
       <div className="flex items-center">
-        <div className="w-8 h-8 rounded-full overflow-hidden mr-2">
+        <div className="w-6 h-6 md:w-8 md:h-8 rounded-full overflow-hidden mr-2">
           <img src={transitionInfo.to.logo} alt={transitionInfo.to.name} className="w-full h-full object-cover" />
         </div>
-        <span className="font-semibold">{transitionInfo.to.name}</span>
+        <span className="mobile-company-name">{transitionInfo.to.name}</span>
       </div>
-      <span className="ml-4 text-sm text-muted-foreground">({transitionInfo.date})</span>
+      <span className="mt-2 md:ml-4 text-xs md:text-sm text-muted-foreground">({transitionInfo.date})</span>
     </motion.div>
   );
 };
@@ -135,18 +133,26 @@ const WorkExperienceCard: React.FC<{ experience: Experience; index: number; defa
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
       <Card className={`mb-4 overflow-hidden border-l-4 ${theme === 'dark' ? 'border-primary bg-gray-800' : 'border-primary bg-white'}`}>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <div className="flex items-center">
-            <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 mobile-work-header">
+          <div className="flex items-center space-x-3 md:space-x-4">
+            <div className="w-8 h-8 md:w-12 md:h-12 rounded-full overflow-hidden shrink-0">
               <img src={experience.logo} alt={experience.company} className="w-full h-full object-cover" />
             </div>
-            <div>
-              <CardTitle>{experience.title}</CardTitle>
-              <CardDescription>{experience.company} | {experience.duration}</CardDescription>
+            <div className="min-w-0">
+              <CardTitle className="mobile-work-title">{experience.title}</CardTitle>
+              <CardDescription className="mobile-work-company">
+                <span className="block truncate">{experience.company}</span>
+                <span className="text-xs md:text-sm text-muted-foreground">{experience.duration}</span>
+              </CardDescription>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => setIsExpanded(!isExpanded)}>
-            {isExpanded ? <ChevronUp /> : <ChevronDown />}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="mobile-expand-button shrink-0"
+          >
+            {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </Button>
         </CardHeader>
         <AnimatePresence>
@@ -157,24 +163,28 @@ const WorkExperienceCard: React.FC<{ experience: Experience; index: number; defa
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <CardContent>
+              <CardContent className="mobile-work-content">
                 {experience.transitionInfo && (
                   <CompanyTransition transitionInfo={experience.transitionInfo} />
                 )}
-                <div className="mb-4">
-                  <strong>Responsibilities:</strong>
-                  <ul className="list-disc list-inside mt-2">
-                    {experience.responsibilities.map((resp, idx) => (
-                      <li key={idx}>{resp}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <strong>Skills:</strong>
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {experience.skills.map((skill, idx) => (
-                      <Badge key={idx} variant="secondary">{skill}</Badge>
-                    ))}
+                <div className="space-y-4">
+                  <div>
+                    <strong className="mobile-section-title">Responsibilities:</strong>
+                    <ul className="mobile-list mt-1">
+                      {experience.responsibilities.map((resp, idx) => (
+                        <li key={idx} className="mobile-list-item">{resp}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <strong className="mobile-section-title">Skills:</strong>
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {experience.skills.map((skill, idx) => (
+                        <Badge key={idx} variant="secondary" className="mobile-work-badge">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -190,16 +200,9 @@ export default function WorkSection() {
   const { theme } = useTheme();
 
   return (
-    <ScrollArea className="h-[calc(100vh-4rem)] px-4 py-6">
-      <div className="max-w-4xl mx-auto">
-        <motion.h2
-          className={`text-3xl font-bold mb-6 flex items-center ${
-            theme === 'dark' ? 'text-white' : 'text-black'
-          }`}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+    <ScrollArea className="h-[calc(100vh-8rem)] md:h-[calc(100vh-4rem)] mobile-section-padding">
+      <div className="max-w-4xl mx-auto mobile-card-spacing">
+        <motion.h2 className="mobile-heading flex items-center">
           <Briefcase className="mr-2" />
           Professional Experience
         </motion.h2>

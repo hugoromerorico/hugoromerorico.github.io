@@ -15,6 +15,8 @@ const initialMessages: Message[] = [
   { role: 'assistant', content: "I can provide information about Hugo's skills, experience, education, and projects. What would you like to know?" }
 ];
 
+const disclaimerMessage = "This chat uses a Small Language Model (SLM) that runs directly in your browser. While it's exciting to have AI running locally, please note that these models are more limited compared to cloud-based solutions like ChatGPT. The responses may be simpler, but it's still a fascinating demonstration of client-side AI capabilities!";
+
 export default function ChatSection() {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState('');
@@ -88,7 +90,12 @@ export default function ChatSection() {
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)] md:h-[calc(100vh-4rem)]">
       {!isModelReady && (
-        <div className="flex flex-col justify-center items-center h-full">
+        <div className="flex flex-col justify-center items-center h-full relative">
+          <div className="absolute top-0 w-full max-w-none px-4 py-2 bg-gray-500/10 dark:bg-gray-800/30">
+            <p className="text-xs md:text-sm italic text-center max-w-4xl mx-auto text-secondary-foreground/80">
+              {disclaimerMessage}
+            </p>
+          </div>
           <Button onClick={handleStartChat} disabled={isLoading}>
             {isLoading ? 'Initializing...' : 'Start Chat'}
           </Button>

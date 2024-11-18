@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ChevronLeft, ChevronRight, ArrowLeft, Info } from 'lucide-react'
 import DoublePendulumSimulation from './DoublePendulumSimulation'
+import Image from 'next/image'
 
 interface Project {
   title: string;
@@ -129,16 +130,20 @@ export default function ProjectsSection() {
   )
 
   return (
-    <ScrollArea className="h-[calc(100vh-4rem)] px-4 py-6">
-      <div className="max-w-4xl mx-auto">
+    <ScrollArea className="h-[calc(100vh-8rem)] md:h-[calc(100vh-4rem)] mobile-section-padding">
+      <div className="max-w-4xl mx-auto mobile-card-spacing">
         {!showProject ? (
           <Card className={`overflow-hidden ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
-            <CardContent className="p-6">
-              <img
-                src={currentProject.image}
-                alt={currentProject.title}
-                className="w-full h-64 object-cover mb-4 rounded-md"
-              />
+            <CardContent className="card-mobile-padding">
+              <div className="relative w-full h-64 mb-4">
+                <Image
+                  src={currentProject.image}
+                  alt={currentProject.title}
+                  fill
+                  className="object-cover rounded-md"
+                  sizes="(max-width: 768px) 100vw, 768px"
+                />
+              </div>
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-2xl font-bold">{currentProject.title}</h3>
                 <InfoButton />

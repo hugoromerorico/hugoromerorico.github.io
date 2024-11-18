@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Briefcase, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface TransitionInfo {
   from: { name: string; logo: string };
@@ -104,16 +105,28 @@ const CompanyTransition: React.FC<{ transitionInfo: TransitionInfo }> = ({ trans
       } mobile-transition-container`}
     >
       <div className="flex items-center mb-2 md:mb-0">
-        <div className="w-6 h-6 md:w-8 md:h-8 rounded-full overflow-hidden mr-2">
-          <img src={transitionInfo.from.logo} alt={transitionInfo.from.name} className="w-full h-full object-cover" />
+        <div className="w-6 h-6 md:w-8 md:h-8 rounded-full overflow-hidden relative mr-2">
+          <Image
+            src={transitionInfo.from.logo}
+            alt={transitionInfo.from.name}
+            fill
+            className="object-cover"
+            sizes="32px"
+          />
         </div>
         <span className="mobile-company-name">{transitionInfo.from.name}</span>
       </div>
       <ArrowRight className="hidden md:block mx-4 text-primary" />
       <ArrowRight className="block md:hidden rotate-90 my-2 text-primary" />
       <div className="flex items-center">
-        <div className="w-6 h-6 md:w-8 md:h-8 rounded-full overflow-hidden mr-2">
-          <img src={transitionInfo.to.logo} alt={transitionInfo.to.name} className="w-full h-full object-cover" />
+        <div className="w-6 h-6 md:w-8 md:h-8 rounded-full overflow-hidden relative mr-2">
+          <Image
+            src={transitionInfo.to.logo}
+            alt={transitionInfo.to.name}
+            fill
+            className="object-cover"
+            sizes="32px"
+          />
         </div>
         <span className="mobile-company-name">{transitionInfo.to.name}</span>
       </div>
@@ -135,8 +148,14 @@ const WorkExperienceCard: React.FC<{ experience: Experience; index: number; defa
       <Card className={`mb-4 overflow-hidden border-l-4 ${theme === 'dark' ? 'border-primary bg-gray-800' : 'border-primary bg-white'}`}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 mobile-work-header">
           <div className="flex items-center space-x-3 md:space-x-4">
-            <div className="w-8 h-8 md:w-12 md:h-12 rounded-full overflow-hidden shrink-0">
-              <img src={experience.logo} alt={experience.company} className="w-full h-full object-cover" />
+            <div className="w-8 h-8 md:w-12 md:h-12 rounded-full overflow-hidden relative shrink-0">
+              <Image
+                src={experience.logo}
+                alt={experience.company}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 32px, 48px"
+              />
             </div>
             <div className="min-w-0">
               <CardTitle className="mobile-work-title">{experience.title}</CardTitle>
@@ -202,7 +221,14 @@ export default function WorkSection() {
   return (
     <ScrollArea className="h-[calc(100vh-8rem)] md:h-[calc(100vh-4rem)] mobile-section-padding">
       <div className="max-w-4xl mx-auto mobile-card-spacing">
-        <motion.h2 className="mobile-heading flex items-center">
+        <motion.h2 
+          className={`mobile-heading flex items-center ${
+            theme === 'dark' ? 'text-white' : 'text-black'
+          }`}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <Briefcase className="mr-2" />
           Professional Experience
         </motion.h2>
@@ -213,7 +239,7 @@ export default function WorkSection() {
               key={index} 
               experience={experience} 
               index={index} 
-              defaultExpanded={index === 0} // AI Engineer role is expanded by default
+              defaultExpanded={index === 0}
             />
           ))}
         </div>

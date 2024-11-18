@@ -115,10 +115,12 @@ const aspects: Record<AspectType, Aspect> = {
             </span>
           )}
         </p>
-        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-sm">
-          <img 
-            src={`https://ghchart.rshah.org/hugo-romero-mm`} 
-            alt="Hugo Romero's GitHub Contributions" 
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-sm relative">
+          <Image
+            src={`https://ghchart.rshah.org/hugo-romero-mm`}
+            alt="Hugo Romero's GitHub Contributions"
+            width={800}
+            height={128}
             className="w-full"
           />
         </div>
